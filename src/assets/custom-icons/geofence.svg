@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+  <path
+    d="M12 5.25 18.75 12 12 18.75 5.25 12 12 5.25Z"
+    stroke="currentColor"
+    stroke-width="1.75"
+    stroke-linejoin="round"
+  />
+  <circle cx="12" cy="5.25" r="1.65" fill="currentColor" />
+  <circle cx="18.75" cy="12" r="1.65" fill="currentColor" />
+  <circle cx="12" cy="18.75" r="1.65" fill="currentColor" />
+  <circle cx="5.25" cy="12" r="1.65" fill="currentColor" />
+</svg>

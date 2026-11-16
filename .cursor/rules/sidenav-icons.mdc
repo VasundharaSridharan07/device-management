@@ -1,0 +1,27 @@
+---
+description: Side navigation icons match the Map row — ModusWcIcon, 24×24, same slot padding
+alwaysApply: true
+---
+
+# Side navigation icons
+
+Every rail icon must match **Map**: `ModusWcIcon` in `slot="start-icon"`, `size="md"`, `customClass="nav-icon"`, **24×24**. Do not mix custom `<span>` / `<img>` SVGs into the rail unless no Modus glyph exists.
+
+- Token: `--app-sidenav-icon-size: 24px` in `src/index.css`
+- Render through `NavIcon` so padding and size stay shared
+- Do not set a different `size`, width, height, or start-icon padding per item
+
+```tsx
+// ❌ BAD — custom host or a different size than Map
+<span slot="start-icon" className="nav-custom-icon" />
+<ModusWcIcon decorative name="alert" size="sm" slot="start-icon" />
+
+// ✅ GOOD — same as Map
+<ModusWcIcon
+  customClass="nav-icon"
+  decorative
+  name="map"
+  size="md"
+  slot="start-icon"
+/>
+```
