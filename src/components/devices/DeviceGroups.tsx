@@ -25,6 +25,7 @@ type DeviceGroupsProps = {
   groups: DeviceGroup[];
   selectedGroupId: string;
   checkedCount: number;
+  canCreate: boolean;
   onSelect: (groupId: string) => void;
   onCreate: (name: string) => void;
 };
@@ -45,6 +46,7 @@ export function DeviceGroups({
   groups,
   selectedGroupId,
   checkedCount,
+  canCreate,
   onSelect,
   onCreate,
 }: DeviceGroupsProps) {
@@ -83,9 +85,11 @@ export function DeviceGroups({
     <aside aria-label="Device groups" className="devices-groups">
       <div className="flex items-center justify-between gap-2 px-2 py-2">
         <ModusWcTypography hierarchy="h2" label="Groups" size="sm" weight="semibold" />
-        <ModusWcButton color="tertiary" size="sm" variant="borderless" onButtonClick={openModal}>
-          New Group
-        </ModusWcButton>
+        {canCreate ? (
+          <ModusWcButton color="tertiary" size="sm" variant="borderless" onButtonClick={openModal}>
+            New Group
+          </ModusWcButton>
+        ) : null}
       </div>
       <ModusWcMenu aria-label="All devices" selectionMode="single" size="sm">
         <ModusWcMenuItem

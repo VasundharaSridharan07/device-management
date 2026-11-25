@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@trimble-oss/moduswebcomponents-react": "1.16.0-react19",
+    "leaflet": "1.9.4",
     "react": "19.2.8",
     "react-dom": "19.2.8",
     "react-router-dom": "7.18.4"
@@ -18,6 +19,7 @@
   "devDependencies": {
     "@tailwindcss/vite": "4.3.3",
     "@trimble-oss/modus-icons": "1.21.0",
+    "@types/leaflet": "1.9.22",
     "@types/node": "^24.13.3",
     "@types/react": "19.2.18",
     "@types/react-dom": "19.2.7",

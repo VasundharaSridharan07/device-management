@@ -4,11 +4,9 @@ import {
   ModusWcTypography,
 } from '@trimble-oss/moduswebcomponents-react';
 
-const USER_CARD = {
-  avatarAlt: 'Alex Rivera',
-  email: 'alex.rivera@trimble.com',
-  name: 'Alex Rivera',
-};
+import { personaById } from '../../experiments/config';
+import { useExperiment } from '../../experiments/ExperimentContext';
+import { PrototypeConfig } from './PrototypeConfig';
 
 type AppNavbarProps = {
   isWide: boolean;
@@ -16,12 +14,15 @@ type AppNavbarProps = {
 };
 
 export function AppNavbar({ isWide, onToggleNav }: AppNavbarProps) {
+  const { config } = useExperiment();
+  const userCard = personaById(config.persona).user;
+
   return (
     <ModusWcNavbar
       customClass="app-shell-navbar sticky top-0 z-[120]"
       logoName="trimble"
       mainMenuOpen={false}
-      userCard={USER_CARD}
+      userCard={userCard}
       visibility={{
         ai: isWide,
         apps: isWide,
@@ -53,7 +54,8 @@ export function AppNavbar({ isWide, onToggleNav }: AppNavbarProps) {
           label="Connected apps will appear here."
         />
       </div>
-      <div slot="end" className="flex items-center">
+      <div slot="end" className="flex items-center gap-1">
+        <PrototypeConfig />
         <ModusWcThemeSwitcher aria-label="Theme" />
       </div>
     </ModusWcNavbar>

@@ -1,0 +1,478 @@
+[
+  {
+    "id": "wuhrHCBI7X4",
+    "name": "Kettlewell Drive - Site Cal",
+    "rootId": "m30yxhyHAvo",
+    "thumbnail": "https://resources.connect.trimble.com/thumb/project.png",
+    "address": {
+      "text": "Project boundary",
+      "geometry": "[[-43.51367740110983, 172.43795759703445], [-43.513636806366044, 172.4382150890038], [-43.513559676277595, 172.43875619531596], [-43.51352449409924, 172.43915549445686], [-43.51347036763097, 172.43963129483495], [-43.513052579998714, 172.44100665499613], [-43.51285559192614, 172.44209068863518], [-43.51254912717456, 172.44349920818954], [-43.51122196267295, 172.4431278284268], [-43.51163989217561, 172.4405288572413], [-43.512112724483146, 172.43737703353673], [-43.51367740110983, 172.43795759703445]]"
+    },
+    "location": "northAmerica",
+    "lastVisitedOn": "2026-11-17T12:26:09+0000",
+    "modifiedOn": "2026-11-18T02:56:43+0000",
+    "createdOn": "2026-04-29T00:41:13+0000",
+    "createdBy": {
+      "status": "ACTIVE",
+      "id": "QM-qOG4qHw8",
+      "tiduuid": "48af363c-a4ba-43ca-bdc3-e48e636b9b68",
+      "email": "guillaume_clin@trimble.com",
+      "firstName": "Guillaume",
+      "lastName": "Clin"
+    },
+    "modifiedBy": {
+      "status": "ACTIVE",
+      "id": "QM-qOG4qHw8",
+      "tiduuid": "48af363c-a4ba-43ca-bdc3-e48e636b9b68",
+      "email": "guillaume_clin@trimble.com",
+      "firstName": "Guillaume",
+      "lastName": "Clin"
+    },
+    "updatedOn": "2026-11-18T02:57:34+0000",
+    "updatedBy": {
+      "status": "ACTIVE",
+      "id": "UyTCaWU5NL8",
+      "tiduuid": "331bd62e-c82b-4f26-b85c-266476ed6dee",
+      "email": "ben_broad@trimble.com",
+      "firstName": "Ben",
+      "lastName": "Broad"
+    },
+    "size": 12234663866,
+    "filespaceId": "6cefe8e0-ce87-40f1-ab88-3519c569a1f0",
+    "description": "Kettlewell Drive - Site Cal",
+    "license": {
+      "policyType": "DERIVED",
+      "appAccess": true
+    },
+    "access": "FULL_ACCESS",
+    "iamGroupId": "7bcf065d-38bd-5d1f-86a3-fa9f035eb9de"
+  },
+  {
+    "id": "g432DvVWd38",
+    "name": "Sanders Dam Worksite",
+    "rootId": "6cXD8o9yoYM",
+    "thumbnail": "https://resources.connect.trimble.com/thumb/project.png",
+    "address": {
+      "geometry": "[[48.48455, -113.13464], [48.48467, -113.13621], [48.48295, -113.13874], [48.48167, -113.14224], [48.47995, -113.13972], [48.48455, -113.13464]]"
+    },
+    "location": "northAmerica",
+    "lastVisitedOn": "2026-10-26T15:58:22+0000",
+    "modifiedOn": "2026-09-07T04:03:30+0000",
+    "createdOn": "2023-08-13T20:33:21+0000",
+    "createdBy": {
+      "status": "ACTIVE",
+      "id": "i1hA4uO636k",
+      "tiduuid": "10716f58-3a74-4feb-ae2b-64658f368129",
+      "email": "vasundhara_sridharan@trimble.com",
+      "firstName": "Vasundhara",
+      "lastName": "Sridharan"
+    },
+    "modifiedBy": {
+      "status": "ACTIVE",
+      "id": "i1hA4uO636k",
+      "tiduuid": "10716f58-3a74-4feb-ae2b-64658f368129",
+      "email": "vasundhara_sridharan@trimble.com",
+      "firstName": "Vasundhara",
+      "lastName": "Sridharan"
+    },
+    "updatedOn": "2026-04-26T18:17:45+0000",
+    "updatedBy": {
+      "status": "ACTIVE",
+      "id": "i1hA4uO636k",
+      "tiduuid": "10716f58-3a74-4feb-ae2b-64658f368129",
+      "email": "vasundhara_sridharan@trimble.com",
+      "firstName": "Vasundhara",
+      "lastName": "Sridharan"
+    },
+    "size": 110063891,
+    "filespaceId": "b67630c9-4faf-4537-97a3-cb0d2f6fd77f",
+    "description": "",
+    "license": {
+      "policyType": "DERIVED",
+      "appAccess": true
+    },
+    "access": "FULL_ACCESS",
+    "iamGroupId": "616368b1-7023-54f0-ad03-58f6bd07fdd9"
+  },
+  {
+    "id": "k7NpQ2mLx9A",
+    "name": "Green Line Phase 2",
+    "rootId": "b4RtY8uIo1P",
+    "thumbnail": "https://resources.connect.trimble.com/thumb/project.png",
+    "address": {
+      "text": "Project boundary",
+      "geometry": "[[45.4215, -75.6972], [45.4221, -75.6948], [45.4204, -75.6931], [45.4192, -75.6964], [45.4215, -75.6972]]"
+    },
+    "location": "northAmerica",
+    "lastVisitedOn": "2026-11-02T09:14:33+0000",
+    "modifiedOn": "2026-11-12T16:41:08+0000",
+    "createdOn": "2024-06-18T13:22:47+0000",
+    "createdBy": {
+      "status": "ACTIVE",
+      "id": "QM-qOG4qHw8",
+      "tiduuid": "48af363c-a4ba-43ca-bdc3-e48e636b9b68",
+      "email": "guillaume_clin@trimble.com",
+      "firstName": "Guillaume",
+      "lastName": "Clin"
+    },
+    "modifiedBy": {
+      "status": "ACTIVE",
+      "id": "UyTCaWU5NL8",
+      "tiduuid": "331bd62e-c82b-4f26-b85c-266476ed6dee",
+      "email": "ben_broad@trimble.com",
+      "firstName": "Ben",
+      "lastName": "Broad"
+    },
+    "updatedOn": "2026-11-12T16:42:19+0000",
+    "updatedBy": {
+      "status": "ACTIVE",
+      "id": "UyTCaWU5NL8",
+      "tiduuid": "331bd62e-c82b-4f26-b85c-266476ed6dee",
+      "email": "ben_broad@trimble.com",
+      "firstName": "Ben",
+      "lastName": "Broad"
+    },
+    "size": 845221904,
+    "filespaceId": "3a91c4e2-7b18-4d6f-9c05-1e8a4b77d2c1",
+    "description": "Green Line Phase 2",
+    "license": {
+      "policyType": "DERIVED",
+      "appAccess": true
+    },
+    "access": "FULL_ACCESS",
+    "iamGroupId": "9d2e6f41-0c85-5a17-b3d4-6e8f1a90c2b7"
+  },
+  {
+    "id": "pR8sT1uVw2X",
+    "name": "Harbor Retrofit",
+    "rootId": "c5SuZ9vJp2Q",
+    "thumbnail": "https://resources.connect.trimble.com/thumb/project.png",
+    "address": {
+      "geometry": "[[47.6062, -122.3321], [47.6074, -122.3298], [47.6051, -122.3284], [47.6039, -122.3316], [47.6062, -122.3321]]"
+    },
+    "location": "northAmerica",
+    "lastVisitedOn": "2026-08-19T21:05:44+0000",
+    "modifiedOn": "2026-09-01T11:28:16+0000",
+    "createdOn": "2025-01-09T08:17:02+0000",
+    "createdBy": {
+      "status": "ACTIVE",
+      "id": "i1hA4uO636k",
+      "tiduuid": "10716f58-3a74-4feb-ae2b-64658f368129",
+      "email": "vasundhara_sridharan@trimble.com",
+      "firstName": "Vasundhara",
+      "lastName": "Sridharan"
+    },
+    "modifiedBy": {
+      "status": "ACTIVE",
+      "id": "i1hA4uO636k",
+      "tiduuid": "10716f58-3a74-4feb-ae2b-64658f368129",
+      "email": "vasundhara_sridharan@trimble.com",
+      "firstName": "Vasundhara",
+      "lastName": "Sridharan"
+    },
+    "updatedOn": "2026-09-01T11:30:02+0000",
+    "updatedBy": {
+      "status": "ACTIVE",
+      "id": "QM-qOG4qHw8",
+      "tiduuid": "48af363c-a4ba-43ca-bdc3-e48e636b9b68",
+      "email": "guillaume_clin@trimble.com",
+      "firstName": "Guillaume",
+      "lastName": "Clin"
+    },
+    "size": 2264811733,
+    "filespaceId": "e17b0d44-5c29-4a83-81f6-0b3d9e52a8f4",
+    "description": "",
+    "license": {
+      "policyType": "DERIVED",
+      "appAccess": true
+    },
+    "access": "FULL_ACCESS",
+    "iamGroupId": "2c4a8e90-61b3-5d27-94f1-7a0c3e58d6b2"
+  },
+  {
+    "id": "yZ6aB7cD8eF",
+    "name": "Bassin Project",
+    "rootId": "d6TvA0wKq3R",
+    "thumbnail": "https://resources.connect.trimble.com/thumb/project.png",
+    "address": {
+      "text": "Project boundary",
+      "geometry": "[[29.7604, -95.3698], [29.7618, -95.3671], [29.7592, -95.3654], [29.7576, -95.3689], [29.7604, -95.3698]]"
+    },
+    "location": "northAmerica",
+    "lastVisitedOn": "2026-07-14T18:44:11+0000",
+    "modifiedOn": "2026-07-22T06:12:55+0000",
+    "createdOn": "2024-11-03T19:08:36+0000",
+    "createdBy": {
+      "status": "ACTIVE",
+      "id": "UyTCaWU5NL8",
+      "tiduuid": "331bd62e-c82b-4f26-b85c-266476ed6dee",
+      "email": "ben_broad@trimble.com",
+      "firstName": "Ben",
+      "lastName": "Broad"
+    },
+    "modifiedBy": {
+      "status": "ACTIVE",
+      "id": "QM-qOG4qHw8",
+      "tiduuid": "48af363c-a4ba-43ca-bdc3-e48e636b9b68",
+      "email": "guillaume_clin@trimble.com",
+      "firstName": "Guillaume",
+      "lastName": "Clin"
+    },
+    "updatedOn": "2026-07-22T06:15:40+0000",
+    "updatedBy": {
+      "status": "ACTIVE",
+      "id": "QM-qOG4qHw8",
+      "tiduuid": "48af363c-a4ba-43ca-bdc3-e48e636b9b68",
+      "email": "guillaume_clin@trimble.com",
+      "firstName": "Guillaume",
+      "lastName": "Clin"
+    },
+    "size": 64022817,
+    "filespaceId": "71f2a8c0-9e44-4b15-a6d3-2c8f0e19b5a7",
+    "description": "Bassin Project",
+    "license": {
+      "policyType": "DERIVED",
+      "appAccess": true
+    },
+    "access": "FULL_ACCESS",
+    "iamGroupId": "5e1b7c83-24d6-5f90-a8c2-3d4e6f708192"
+  },
+  {
+    "id": "gH9iJ0kL1mN",
+    "name": "Civic Plaza Works",
+    "rootId": "e7UwB1xLr4S",
+    "thumbnail": "https://resources.connect.trimble.com/thumb/project.png",
+    "address": {
+      "geometry": "[[39.7392, -104.9903], [39.7406, -104.9879], [39.7381, -104.9862], [39.7368, -104.9895], [39.7392, -104.9903]]"
+    },
+    "location": "northAmerica",
+    "lastVisitedOn": "2026-05-28T14:09:27+0000",
+    "modifiedOn": "2026-06-03T23:51:14+0000",
+    "createdOn": "2025-03-21T02:46:58+0000",
+    "createdBy": {
+      "status": "ACTIVE",
+      "id": "QM-qOG4qHw8",
+      "tiduuid": "48af363c-a4ba-43ca-bdc3-e48e636b9b68",
+      "email": "guillaume_clin@trimble.com",
+      "firstName": "Guillaume",
+      "lastName": "Clin"
+    },
+    "modifiedBy": {
+      "status": "ACTIVE",
+      "id": "i1hA4uO636k",
+      "tiduuid": "10716f58-3a74-4feb-ae2b-64658f368129",
+      "email": "vasundhara_sridharan@trimble.com",
+      "firstName": "Vasundhara",
+      "lastName": "Sridharan"
+    },
+    "updatedOn": "2026-06-03T23:52:01+0000",
+    "updatedBy": {
+      "status": "ACTIVE",
+      "id": "i1hA4uO636k",
+      "tiduuid": "10716f58-3a74-4feb-ae2b-64658f368129",
+      "email": "vasundhara_sridharan@trimble.com",
+      "firstName": "Vasundhara",
+      "lastName": "Sridharan"
+    },
+    "size": 418903552,
+    "filespaceId": "c0d85e31-2a67-4f9b-b184-6d5e7f8091a3",
+    "description": "",
+    "license": {
+      "policyType": "DERIVED",
+      "appAccess": true
+    },
+    "access": "FULL_ACCESS",
+    "iamGroupId": "8a3c5d27-90e1-5b46-c7f8-1d2e4a6b8093"
+  },
+  {
+    "id": "oP2qR3sT4uV",
+    "name": "Oak Grove Survey",
+    "rootId": "f8VxC2yMs5T",
+    "thumbnail": "https://resources.connect.trimble.com/thumb/project.png",
+    "address": {
+      "text": "Project boundary",
+      "geometry": "[[33.4484, -112.074], [33.4497, -112.0716], [33.4471, -112.0702], [33.4458, -112.0733], [33.4484, -112.074]]"
+    },
+    "location": "northAmerica",
+    "lastVisitedOn": "2026-03-11T07:33:49+0000",
+    "modifiedOn": "2026-04-02T15:18:22+0000",
+    "createdOn": "2025-09-14T10:55:13+0000",
+    "createdBy": {
+      "status": "ACTIVE",
+      "id": "UyTCaWU5NL8",
+      "tiduuid": "331bd62e-c82b-4f26-b85c-266476ed6dee",
+      "email": "ben_broad@trimble.com",
+      "firstName": "Ben",
+      "lastName": "Broad"
+    },
+    "modifiedBy": {
+      "status": "ACTIVE",
+      "id": "UyTCaWU5NL8",
+      "tiduuid": "331bd62e-c82b-4f26-b85c-266476ed6dee",
+      "email": "ben_broad@trimble.com",
+      "firstName": "Ben",
+      "lastName": "Broad"
+    },
+    "updatedOn": "2026-04-02T15:19:06+0000",
+    "updatedBy": {
+      "status": "ACTIVE",
+      "id": "i1hA4uO636k",
+      "tiduuid": "10716f58-3a74-4feb-ae2b-64658f368129",
+      "email": "vasundhara_sridharan@trimble.com",
+      "firstName": "Vasundhara",
+      "lastName": "Sridharan"
+    },
+    "size": 1577442904,
+    "filespaceId": "4b6e1f78-d093-4c2a-95e7-8a1b3c4d5e60",
+    "description": "Oak Grove Survey",
+    "license": {
+      "policyType": "DERIVED",
+      "appAccess": true
+    },
+    "access": "FULL_ACCESS",
+    "iamGroupId": "1f6a9b04-37c8-5e52-d0a1-4b5c7d8e9f01"
+  },
+  {
+    "id": "wX5yZ6aB7cD",
+    "name": "Riverway Extension",
+    "rootId": "h0ZyE4aOu7V",
+    "thumbnail": "https://resources.connect.trimble.com/thumb/project.png",
+    "address": {
+      "text": "Project boundary",
+      "geometry": "[[51.5074, -0.1278], [51.5086, -0.1251], [51.5062, -0.1236], [51.5049, -0.1269], [51.5074, -0.1278]]"
+    },
+    "location": "europe",
+    "lastVisitedOn": "2026-10-04T11:27:18+0000",
+    "modifiedOn": "2026-10-19T04:36:51+0000",
+    "createdOn": "2024-02-27T16:04:29+0000",
+    "createdBy": {
+      "status": "ACTIVE",
+      "id": "i1hA4uO636k",
+      "tiduuid": "10716f58-3a74-4feb-ae2b-64658f368129",
+      "email": "vasundhara_sridharan@trimble.com",
+      "firstName": "Vasundhara",
+      "lastName": "Sridharan"
+    },
+    "modifiedBy": {
+      "status": "ACTIVE",
+      "id": "QM-qOG4qHw8",
+      "tiduuid": "48af363c-a4ba-43ca-bdc3-e48e636b9b68",
+      "email": "guillaume_clin@trimble.com",
+      "firstName": "Guillaume",
+      "lastName": "Clin"
+    },
+    "updatedOn": "2026-10-19T04:38:12+0000",
+    "updatedBy": {
+      "status": "ACTIVE",
+      "id": "QM-qOG4qHw8",
+      "tiduuid": "48af363c-a4ba-43ca-bdc3-e48e636b9b68",
+      "email": "guillaume_clin@trimble.com",
+      "firstName": "Guillaume",
+      "lastName": "Clin"
+    },
+    "size": 309184422,
+    "filespaceId": "8e2c7a15-6f40-4d8b-a291-3c5d6e7f8091",
+    "description": "Riverway Extension",
+    "license": {
+      "policyType": "DERIVED",
+      "appAccess": true
+    },
+    "access": "FULL_ACCESS",
+    "iamGroupId": "6b0d2e48-a513-5c79-e1f2-8a9b0c1d2e34"
+  },
+  {
+    "id": "eF8gH9iJ0kL",
+    "name": "Alpine Survey",
+    "rootId": "j1AzF5bPv8W",
+    "thumbnail": "https://resources.connect.trimble.com/thumb/project.png",
+    "address": {
+      "geometry": "[[46.948, 7.4474], [46.9492, 7.4501], [46.9468, 7.4516], [46.9455, 7.4483], [46.948, 7.4474]]"
+    },
+    "location": "europe",
+    "lastVisitedOn": "2026-09-15T08:52:06+0000",
+    "modifiedOn": "2026-09-28T19:14:37+0000",
+    "createdOn": "2023-12-05T21:39:44+0000",
+    "createdBy": {
+      "status": "ACTIVE",
+      "id": "UyTCaWU5NL8",
+      "tiduuid": "331bd62e-c82b-4f26-b85c-266476ed6dee",
+      "email": "ben_broad@trimble.com",
+      "firstName": "Ben",
+      "lastName": "Broad"
+    },
+    "modifiedBy": {
+      "status": "ACTIVE",
+      "id": "UyTCaWU5NL8",
+      "tiduuid": "331bd62e-c82b-4f26-b85c-266476ed6dee",
+      "email": "ben_broad@trimble.com",
+      "firstName": "Ben",
+      "lastName": "Broad"
+    },
+    "updatedOn": "2026-09-28T19:16:03+0000",
+    "updatedBy": {
+      "status": "ACTIVE",
+      "id": "i1hA4uO636k",
+      "tiduuid": "10716f58-3a74-4feb-ae2b-64658f368129",
+      "email": "vasundhara_sridharan@trimble.com",
+      "firstName": "Vasundhara",
+      "lastName": "Sridharan"
+    },
+    "size": 88210455,
+    "filespaceId": "f53a9d06-1b82-4e37-8c64-0d2e5f6a7b98",
+    "description": "",
+    "license": {
+      "policyType": "DERIVED",
+      "appAccess": true
+    },
+    "access": "FULL_ACCESS",
+    "iamGroupId": "4c8e0f12-b746-5d83-92a3-1e3f5a7b8c90"
+  },
+  {
+    "id": "mN1oP2qR3sT",
+    "name": "Pacific Wharf",
+    "rootId": "k2BaG6cQw9X",
+    "thumbnail": "https://resources.connect.trimble.com/thumb/project.png",
+    "address": {
+      "text": "Project boundary",
+      "geometry": "[[1.3521, 103.8198], [1.3534, 103.8225], [1.3508, 103.8241], [1.3494, 103.8209], [1.3521, 103.8198]]"
+    },
+    "location": "asia",
+    "lastVisitedOn": "2026-11-08T03:21:57+0000",
+    "modifiedOn": "2026-11-09T12:47:26+0000",
+    "createdOn": "2025-05-30T07:11:08+0000",
+    "createdBy": {
+      "status": "ACTIVE",
+      "id": "QM-qOG4qHw8",
+      "tiduuid": "48af363c-a4ba-43ca-bdc3-e48e636b9b68",
+      "email": "guillaume_clin@trimble.com",
+      "firstName": "Guillaume",
+      "lastName": "Clin"
+    },
+    "modifiedBy": {
+      "status": "ACTIVE",
+      "id": "i1hA4uO636k",
+      "tiduuid": "10716f58-3a74-4feb-ae2b-64658f368129",
+      "email": "vasundhara_sridharan@trimble.com",
+      "firstName": "Vasundhara",
+      "lastName": "Sridharan"
+    },
+    "updatedOn": "2026-11-09T12:48:41+0000",
+    "updatedBy": {
+      "status": "ACTIVE",
+      "id": "UyTCaWU5NL8",
+      "tiduuid": "331bd62e-c82b-4f26-b85c-266476ed6dee",
+      "email": "ben_broad@trimble.com",
+      "firstName": "Ben",
+      "lastName": "Broad"
+    },
+    "size": 5733902188,
+    "filespaceId": "a94c2e67-8d15-4f0b-b738-5e6f7a8b9c01",
+    "description": "Pacific Wharf",
+    "license": {
+      "policyType": "DERIVED",
+      "appAccess": true
+    },
+    "access": "FULL_ACCESS",
+    "iamGroupId": "7d1e3f45-c890-5a26-b4c5-2f4a6b8c9d02"
+  }
+]

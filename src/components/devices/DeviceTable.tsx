@@ -21,6 +21,7 @@ type DeviceTableProps = {
   query: string;
   selectedRowIds: string[];
   canEditGroup: boolean;
+  canRegisterDevices: boolean;
   canRemove: boolean;
   onQueryChange: (query: string) => void;
   onSelectedRowIdsChange: (ids: string[]) => void;
@@ -75,6 +76,18 @@ const COLUMNS: ITableColumn[] = [
     cellRenderer: renderDeviceName,
   },
   {
+    id: 'model',
+    accessor: 'model',
+    header: 'Device Model',
+    sortable: true,
+  },
+  {
+    id: 'lastUpdated',
+    accessor: 'lastUpdated',
+    header: 'Last Reported',
+    sortable: true,
+  },
+  {
     id: 'serialNumber',
     accessor: 'serialNumber',
     header: 'Serial Number',
@@ -119,6 +132,7 @@ export function DeviceTable({
   query,
   selectedRowIds,
   canEditGroup,
+  canRegisterDevices,
   canRemove,
   onQueryChange,
   onSelectedRowIdsChange,
@@ -135,6 +149,8 @@ export function DeviceTable({
       devices.map((device) => ({
         id: device.id,
         name: device.name,
+        model: device.model,
+        lastUpdated: device.lastUpdated,
         serialNumber: device.serialNumber,
         currentFirmware: device.currentFirmware,
         availableFirmware: device.availableFirmware,
@@ -245,10 +261,12 @@ export function DeviceTable({
             </ModusWcButton>
           </>
         ) : null}
-        <ModusWcButton color="primary" size="sm" variant="filled">
-          <ModusWcIcon decorative name="add" size="xs" />
-          Add
-        </ModusWcButton>
+        {canRegisterDevices ? (
+          <ModusWcButton color="primary" size="sm" variant="filled">
+            <ModusWcIcon decorative name="add" size="xs" />
+            Add
+          </ModusWcButton>
+        ) : null}
       </div>
       <ModusWcTable
         key={tableKey}
