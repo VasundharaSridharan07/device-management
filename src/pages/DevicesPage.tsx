@@ -1,4 +1,4 @@
-import { ModusWcTypography } from '@trimble-oss/moduswebcomponents-react';
+import { ModusWcAlert, ModusWcTypography } from '@trimble-oss/moduswebcomponents-react';
 import { useMemo, useState } from 'react';
 
 import { DeviceGroups } from '../components/devices/DeviceGroups';
@@ -21,6 +21,8 @@ import {
   removeDeviceFromProject,
   type Project,
 } from '../data/projects';
+import { canAdministerDevices, personaById } from '../experiments/config';
+import { useExperiment } from '../experiments/ExperimentContext';
 
 function sameIds(left: string[], right: string[]): boolean {
   if (left.length !== right.length) {
@@ -46,6 +48,9 @@ function visibleDeviceId(
 }
 
 export function DevicesPage() {
+  const { config } = useExperiment();
+  const admin = canAdministerDevices(config.persona);
+  const persona = personaById(config.persona);
   const [groups, setGroups] = useState<DeviceGroup[]>(INITIAL_GROUPS);
   const [projects, setProjects] = useState<Project[]>(INITIAL_PROJECTS);
   const [selectedGroupId, setSelectedGroupId] = useState(ALL_DEVICES_GROUP_ID);
@@ -61,7 +66,8 @@ export function DevicesPage() {
     () => selectedRowIds.filter((id) => devices.some((device) => device.id === id)),
     [devices, selectedRowIds],
   );
-  const editingGroup = selectedGroupId !== ALL_DEVICES_GROUP_ID;
+  const editingGroup = admin && selectedGroupId !== ALL_DEVICES_GROUP_ID;
+  const productUserNote = `${persona.user.name} can review devices, groups, and project membership. Creating groups, registering devices, and assigning projects stays with a licensed admin.`;
   const activeDevice = useMemo(
     () => DEVICES.find((device) => device.id === activeDeviceId) ?? null,
     [activeDeviceId],
@@ -70,9 +76,19 @@ export function DevicesPage() {
   return (
     <div className="devices-page">
       <ModusWcTypography hierarchy="h1" label="Devices" />
+      {admin ? null : (
+        <ModusWcAlert
+          alertDescription={productUserNote}
+          alertTitle="Product user"
+          icon="person"
+          role="status"
+          variant="neutral"
+        />
+      )}
       <div className={activeDevice ? 'devices-stage devices-stage-open' : 'devices-stage'}>
         <div className="devices-layout" ref={setLayoutEl}>
           <DeviceGroups
+            canCreate={admin}
             checkedCount={checkedIds.length}
             groups={groups}
             selectedGroupId={selectedGroupId}
@@ -93,6 +109,7 @@ export function DevicesPage() {
           />
           <DeviceTable
             canEditGroup={editingGroup}
+            canRegisterDevices={admin}
             canRemove={checkedIds.length > 0}
             candidates={devicesOutsideGroup(groups, selectedGroupId)}
             devices={devices}

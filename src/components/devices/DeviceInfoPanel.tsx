@@ -157,7 +157,10 @@ export function DeviceInfoPanel({
               <DeviceProjects
                 key={device.id}
                 deviceId={device.id}
+                deviceName={device.name}
                 projects={projects}
+                serialNumber={device.serialNumber}
+                serverLocationId={device.serverLocationId}
                 onAdd={(projectIds) => onAddToProjects(device.id, projectIds)}
                 onRemove={(projectId) => onRemoveFromProject(device.id, projectId)}
               />

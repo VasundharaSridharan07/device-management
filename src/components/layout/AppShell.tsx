@@ -12,6 +12,7 @@ export function AppShell() {
   const isPush = width >= PUSH_LAYOUT_MIN_PX;
   const location = useLocation();
   const current = navFromPath(location.pathname);
+  const isMap = location.pathname === '/';
   const [expanded, setExpanded] = useState(
     () => typeof window !== 'undefined' && window.innerWidth >= PUSH_LAYOUT_MIN_PX,
   );
@@ -43,7 +44,11 @@ export function AppShell() {
         <main
           id="main-content"
           tabIndex={-1}
-          className="flex flex-col gap-3 px-4 py-4 outline-none lg:px-6"
+          className={
+            isMap
+              ? 'map-main outline-none'
+              : 'flex flex-col gap-3 px-4 py-4 outline-none lg:px-6'
+          }
           onClick={() => {
             if (!isPush && expanded) {
               setExpanded(false);

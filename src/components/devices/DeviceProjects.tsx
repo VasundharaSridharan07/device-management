@@ -1,87 +1,276 @@
 import {
+  ModusWcBadge,
   ModusWcButton,
   ModusWcDivider,
   ModusWcIcon,
   ModusWcModal,
-  ModusWcTable,
+  ModusWcSelect,
+  ModusWcTextInput,
   ModusWcTypography,
 } from '@trimble-oss/moduswebcomponents-react';
-import type { ITableColumn } from '@trimble-oss/moduswebcomponents';
-import { useMemo, useState } from 'react';
+import type { ISelectOption } from '@trimble-oss/moduswebcomponents';
+import { useEffect, useMemo, useState } from 'react';
 
-import { ACCOUNT_NAME, projectsForDevice, type Project } from '../../data/projects';
+import { SERVER_LOCATIONS, serverLocationLabel } from '../../data/devices';
+import {
+  activeProjectCount,
+  assignedOutsideRegionCount,
+  isDeviceActiveInProject,
+  projectViewUrl,
+  projectsAvailableInRegion,
+  projectsForDevice,
+  projectsForDeviceInRegion,
+  type Project,
+} from '../../data/projects';
+import { canAdministerDevices, manageProjectsVariant } from '../../experiments/config';
+import { useExperiment } from '../../experiments/ExperimentContext';
+import { ManageProjectsOption02, MANAGE_PROJECTS_OPTION_02_MODAL_ID } from './ManageProjectsOption02';
 import { closeModusDialog, showModusDialog } from './modusDialog';
 
 const MANAGE_PROJECTS_MODAL_ID = 'manage-device-projects-modal';
+const REMOVE_PROJECT_MODAL_ID = 'remove-device-project-modal';
 const VISIBLE_PROJECT_NAMES = 2;
-
-const PROJECT_COLUMNS: ITableColumn[] = [
-  {
-    id: 'name',
-    accessor: 'name',
-    header: 'Project',
-    sortable: true,
-  },
-];
 
 type DeviceProjectsProps = {
   deviceId: string;
+  deviceName: string;
+  serialNumber: string;
+  serverLocationId: string;
   projects: Project[];
   onAdd: (projectIds: string[]) => void;
   onRemove: (projectId: string) => void;
 };
 
-function sameIds(left: string[], right: string[]): boolean {
-  if (left.length !== right.length) {
-    return false;
+function readFieldValue(event: CustomEvent<InputEvent>): string {
+  const target = event.detail?.target;
+  if (target instanceof HTMLInputElement || target instanceof HTMLSelectElement) {
+    return target.value;
   }
 
-  const sortedLeft = [...left].sort();
-  const sortedRight = [...right].sort();
-  return sortedLeft.every((id, index) => id === sortedRight[index]);
+  return '';
 }
 
-export function DeviceProjects({ deviceId, projects, onAdd, onRemove }: DeviceProjectsProps) {
-  const [pickerIds, setPickerIds] = useState<string[]>([]);
-  const [pickerSession, setPickerSession] = useState(0);
+function matchesQuery(project: Project, query: string): boolean {
+  const needle = query.trim().toLowerCase();
+  return needle.length === 0 || project.name.toLowerCase().includes(needle);
+}
+
+function openProject(projectId: string) {
+  window.open(projectViewUrl(projectId), '_blank', 'noopener,noreferrer');
+}
+
+type ProjectColumnProps = {
+  title: string;
+  count: number;
+  query: string;
+  searchLabel: string;
+  emptyLabel: string;
+  projects: Project[];
+  deviceId: string;
+  action: 'assign' | 'remove';
+  onQueryChange: (query: string) => void;
+  onAssign?: (projectId: string) => void;
+  onRemove?: (project: Project) => void;
+};
+
+function ProjectColumn({
+  title,
+  count,
+  query,
+  searchLabel,
+  emptyLabel,
+  projects,
+  deviceId,
+  action,
+  onQueryChange,
+  onAssign,
+  onRemove,
+}: ProjectColumnProps) {
+  const visible = projects.filter((project) => matchesQuery(project, query));
+  const emptyMessage =
+    projects.length === 0 ? emptyLabel : `No ${title.toLowerCase()} projects match this search.`;
+
+  return (
+    <section aria-label={title} className="manage-projects-column">
+      <div className="manage-projects-column-heading">
+        <ModusWcTypography hierarchy="h3" label={title} size="sm" weight="semibold">
+          {title}
+        </ModusWcTypography>
+        <ModusWcTypography hierarchy="p" label={String(count)} size="sm">
+          {count}
+        </ModusWcTypography>
+      </div>
+      <ModusWcTextInput
+        aria-label={searchLabel}
+        includeClear
+        includeSearch
+        placeholder="Search"
+        size="sm"
+        value={query}
+        onClearClick={() => onQueryChange('')}
+        onInputChange={(event) => onQueryChange(readFieldValue(event))}
+      />
+      {visible.length === 0 ? (
+        <ModusWcTypography customClass="app-muted" hierarchy="p" label={emptyMessage} size="sm">
+          {emptyMessage}
+        </ModusWcTypography>
+      ) : (
+        <ul className="manage-projects-list">
+          {visible.map((project) => {
+            const active = isDeviceActiveInProject(project, deviceId);
+            return (
+              <li key={project.id}>
+                <a
+                  className="manage-projects-name"
+                  href={projectViewUrl(project.id)}
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  <ModusWcTypography hierarchy="p" label={project.name} size="sm">
+                    {project.name}
+                  </ModusWcTypography>
+                </a>
+                {active ? (
+                  <span className="manage-projects-badge">
+                    <ModusWcBadge color="success" size="sm" variant="filled">
+                      Active
+                    </ModusWcBadge>
+                  </span>
+                ) : null}
+                <div className="manage-projects-row-actions">
+                  <ModusWcButton
+                    aria-label={`View ${project.name}`}
+                    color="tertiary"
+                    size="sm"
+                    variant="borderless"
+                    onButtonClick={() => openProject(project.id)}
+                  >
+                    <ModusWcIcon decorative name="launch" size="xs" />
+                    View
+                  </ModusWcButton>
+                  {action === 'remove' ? (
+                    <ModusWcButton
+                      color="tertiary"
+                      size="sm"
+                      variant="outlined"
+                      onButtonClick={() => onRemove?.(project)}
+                    >
+                      Remove
+                    </ModusWcButton>
+                  ) : (
+                    <ModusWcButton
+                      color="tertiary"
+                      size="sm"
+                      variant="outlined"
+                      onButtonClick={() => onAssign?.(project.id)}
+                    >
+                      <ModusWcIcon decorative name="add" size="xs" />
+                      Assign
+                    </ModusWcButton>
+                  )}
+                </div>
+              </li>
+            );
+          })}
+        </ul>
+      )}
+    </section>
+  );
+}
+
+export function DeviceProjects({
+  deviceId,
+  deviceName,
+  serialNumber,
+  serverLocationId,
+  projects,
+  onAdd,
+  onRemove,
+}: DeviceProjectsProps) {
+  const { config } = useExperiment();
+  const canManage = canAdministerDevices(config.persona);
+  const variant = manageProjectsVariant(config.manageProjects);
+  const [locationId, setLocationId] = useState(serverLocationId);
+  const [assignedQuery, setAssignedQuery] = useState('');
+  const [availableQuery, setAvailableQuery] = useState('');
+  const [pendingRemove, setPendingRemove] = useState<Project | null>(null);
+
   const assigned = useMemo(() => projectsForDevice(projects, deviceId), [projects, deviceId]);
-  const assignedIds = useMemo(() => assigned.map((project) => project.id), [assigned]);
+  const assignedHere = useMemo(
+    () => projectsForDeviceInRegion(projects, deviceId, locationId),
+    [projects, deviceId, locationId],
+  );
+  const availableHere = useMemo(
+    () => projectsAvailableInRegion(projects, deviceId, locationId),
+    [projects, deviceId, locationId],
+  );
+  const activeCount = useMemo(
+    () => activeProjectCount(projects, deviceId),
+    [projects, deviceId],
+  );
+  const outsideCount = assignedOutsideRegionCount(projects, deviceId, locationId);
   const preview = assigned.slice(0, VISIBLE_PROJECT_NAMES);
   const hiddenCount = assigned.length - preview.length;
-  const pickerRows = useMemo(
-    () => projects.map((project) => ({ id: project.id, name: project.name })),
-    [projects],
-  );
-  const pickerKey = `${pickerSession}|${pickerRows.map((row) => row.id).join('|')}`;
-  const selectionUnchanged = sameIds(pickerIds, assignedIds);
+  const locationOptions: ISelectOption[] = SERVER_LOCATIONS.map((location) => ({
+    value: location.id,
+    label:
+      location.id === serverLocationId
+        ? `${location.label} (this device)`
+        : location.label,
+  }));
+  const pendingActive = pendingRemove
+    ? isDeviceActiveInProject(pendingRemove, deviceId)
+    : false;
+  const confirmMessage = pendingRemove
+    ? pendingActive
+      ? `${deviceName} is currently active in ${pendingRemove.name}. Remove it from this project?`
+      : `Remove ${deviceName} from ${pendingRemove.name}?`
+    : '';
+  const subtitle = `${deviceName} · ${serialNumber}`;
+  const outsideLabel = `Also assigned in other server locations (${outsideCount}).`;
+  const activeLabel = `Active in ${activeCount}`;
+
+  useEffect(() => {
+    closeModusDialog(MANAGE_PROJECTS_MODAL_ID);
+    closeModusDialog(MANAGE_PROJECTS_OPTION_02_MODAL_ID);
+    closeModusDialog(REMOVE_PROJECT_MODAL_ID);
+  }, [canManage, variant.id]);
 
   const openPicker = () => {
-    setPickerIds(assignedIds);
-    setPickerSession((session) => session + 1);
+    if (variant.id === 'option-02') {
+      showModusDialog(MANAGE_PROJECTS_OPTION_02_MODAL_ID);
+      return;
+    }
+
+    setLocationId(serverLocationId);
+    setAssignedQuery('');
+    setAvailableQuery('');
+    setPendingRemove(null);
     showModusDialog(MANAGE_PROJECTS_MODAL_ID);
   };
 
   const closePicker = () => {
     closeModusDialog(MANAGE_PROJECTS_MODAL_ID);
-    setPickerIds([]);
   };
 
-  const confirmSave = () => {
-    if (selectionUnchanged) {
+  const askRemove = (project: Project) => {
+    setPendingRemove(project);
+    showModusDialog(REMOVE_PROJECT_MODAL_ID);
+  };
+
+  const cancelRemove = () => {
+    closeModusDialog(REMOVE_PROJECT_MODAL_ID);
+    setPendingRemove(null);
+  };
+
+  const confirmRemove = () => {
+    if (!pendingRemove) {
       return;
     }
 
-    const selected = new Set(pickerIds);
-    const current = new Set(assignedIds);
-    const toAdd = pickerIds.filter((id) => !current.has(id));
-    const toRemove = assignedIds.filter((id) => !selected.has(id));
-
-    if (toAdd.length > 0) {
-      onAdd(toAdd);
-    }
-
-    toRemove.forEach((projectId) => onRemove(projectId));
-    closePicker();
+    onRemove(pendingRemove.id);
+    closeModusDialog(REMOVE_PROJECT_MODAL_ID);
+    setPendingRemove(null);
   };
 
   return (
@@ -127,63 +316,123 @@ export function DeviceProjects({ deviceId, projects, onAdd, onRemove }: DevicePr
               {hiddenCount} more
             </ModusWcTypography>
           ) : null}
+          {activeCount > 0 ? (
+            <ModusWcTypography customClass="app-muted" hierarchy="p" label={activeLabel} size="sm">
+              {activeLabel}
+            </ModusWcTypography>
+          ) : null}
         </div>
       )}
-      <div>
-        <ModusWcButton color="tertiary" size="sm" variant="outlined" onButtonClick={openPicker}>
-          Manage
-        </ModusWcButton>
-      </div>
+      {canManage ? (
+        <div>
+          <ModusWcButton color="tertiary" size="sm" variant="outlined" onButtonClick={openPicker}>
+            Manage
+          </ModusWcButton>
+        </div>
+      ) : (
+        <ModusWcTypography
+          customClass="app-muted"
+          hierarchy="p"
+          label="A licensed admin assigns projects."
+          size="sm"
+        >
+          A licensed admin assigns projects.
+        </ModusWcTypography>
+      )}
       <ModusWcModal
-        aria-label="Projects"
-        customClass="device-picker-modal"
+        aria-label="Manage projects"
+        customClass="manage-projects-modal"
         modalId={MANAGE_PROJECTS_MODAL_ID}
+        showFullscreenToggle
       >
-        <div slot="header">
-          <ModusWcTypography hierarchy="h2" label="Projects" size="md" weight="semibold">
-            Projects
+        <div slot="header" className="manage-projects-header">
+          <ModusWcTypography hierarchy="h2" label="Manage projects" size="md" weight="semibold">
+            Manage projects
+          </ModusWcTypography>
+          <ModusWcTypography customClass="app-muted" hierarchy="p" label={subtitle} size="sm">
+            {subtitle}
           </ModusWcTypography>
         </div>
-        <div slot="content">
+        <div slot="content" className="manage-projects-body">
+          <div className="manage-projects-location">
+            <ModusWcSelect
+              label="Server location"
+              options={locationOptions}
+              size="sm"
+              value={locationId}
+              onInputChange={(event) => {
+                const next = readFieldValue(event);
+                if (SERVER_LOCATIONS.some((location) => location.id === next)) {
+                  setLocationId(next);
+                }
+              }}
+            />
+          </div>
           <ModusWcTypography
-            customClass="app-muted device-modal-copy"
+            customClass="app-muted"
             hierarchy="p"
-            label={ACCOUNT_NAME}
+            label="Projects below are only from the selected server location."
             size="sm"
           >
-            {ACCOUNT_NAME}
+            Projects below are only from the selected server location.
           </ModusWcTypography>
-          <div className="device-picker">
-            <ModusWcTable
-              key={pickerKey}
-              caption="Projects in this account"
-              columns={PROJECT_COLUMNS}
-              data={pickerRows}
-              density="compact"
-              hover
-              selectable="multi"
-              selectedRowIds={pickerIds}
-              sortable
-              onRowSelectionChange={(event) => {
-                const ids = event.detail?.selectedRowIds ?? [];
-                setPickerIds((current) => (sameIds(current, ids) ? current : ids));
-              }}
+          {outsideCount > 0 ? (
+            <ModusWcTypography customClass="app-muted" hierarchy="p" label={outsideLabel} size="sm">
+              {outsideLabel}
+            </ModusWcTypography>
+          ) : null}
+          <div className="manage-projects-columns">
+            <ProjectColumn
+              action="remove"
+              count={assignedHere.length}
+              deviceId={deviceId}
+              emptyLabel={`Not assigned to any projects in ${serverLocationLabel(locationId)}.`}
+              projects={assignedHere}
+              query={assignedQuery}
+              searchLabel="Search assigned projects"
+              title="Assigned"
+              onQueryChange={setAssignedQuery}
+              onRemove={askRemove}
+            />
+            <ProjectColumn
+              action="assign"
+              count={availableHere.length}
+              deviceId={deviceId}
+              emptyLabel={`No projects left to assign in ${serverLocationLabel(locationId)}.`}
+              projects={availableHere}
+              query={availableQuery}
+              searchLabel="Search available projects"
+              title="Available"
+              onAssign={(projectId) => onAdd([projectId])}
+              onQueryChange={setAvailableQuery}
             />
           </div>
         </div>
         <div slot="footer" className="device-modal-actions">
           <ModusWcButton color="tertiary" size="sm" variant="outlined" onButtonClick={closePicker}>
+            Close
+          </ModusWcButton>
+        </div>
+      </ModusWcModal>
+      <ManageProjectsOption02 deviceName={deviceName} serialNumber={serialNumber} />
+      <ModusWcModal aria-label="Remove from project" modalId={REMOVE_PROJECT_MODAL_ID}>
+        <div slot="header">
+          <ModusWcTypography hierarchy="h2" label="Remove from project" size="md" weight="semibold">
+            Remove from project
+          </ModusWcTypography>
+        </div>
+        <div slot="content">
+          <ModusWcTypography hierarchy="p" label={confirmMessage} size="sm">
+            {confirmMessage}
+          </ModusWcTypography>
+        </div>
+        <div slot="footer" className="device-modal-actions">
+          <ModusWcButton color="tertiary" size="sm" variant="outlined" onButtonClick={cancelRemove}>
             Cancel
           </ModusWcButton>
-          <ModusWcButton
-            color="primary"
-            disabled={selectionUnchanged}
-            size="sm"
-            variant="filled"
-            onButtonClick={confirmSave}
-          >
-            <ModusWcIcon decorative name="save_disk" size="xs" />
-            Save
+          <ModusWcButton color="danger" size="sm" variant="filled" onButtonClick={confirmRemove}>
+            <ModusWcIcon decorative name="delete" size="xs" />
+            Remove
           </ModusWcButton>
         </div>
       </ModusWcModal>

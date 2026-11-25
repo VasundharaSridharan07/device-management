@@ -1,3 +1,5 @@
+import deviceRecords from './devices.json' with { type: 'json' };
+
 export const ALL_DEVICES_GROUP_ID = 'all';
 
 export type DeviceGroup = {
@@ -8,9 +10,32 @@ export type DeviceGroup = {
 
 export type GroupNameError = 'empty' | 'duplicate';
 
+/** Same ids as project locations in projects.json. */
+export const SERVER_LOCATIONS = [
+  { id: 'northAmerica', label: 'North America' },
+  { id: 'europe', label: 'Europe' },
+  { id: 'asia', label: 'Asia Pacific' },
+] as const;
+
+export type ServerLocationId = (typeof SERVER_LOCATIONS)[number]['id'];
+
+const SERVER_LOCATION_IDS = new Set<string>(SERVER_LOCATIONS.map((location) => location.id));
+
+export function serverLocationLabel(id: string): string {
+  return SERVER_LOCATIONS.find((location) => location.id === id)?.label ?? id;
+}
+
+export type DeviceProjectAssignment = {
+  projectId: string;
+  active: boolean;
+};
+
+export type DeviceConnectivity = 'on' | 'off';
+
 export type Device = {
   id: string;
   name: string;
+  model: string;
   serialNumber: string;
   currentFirmware: string;
   availableFirmware: string;
@@ -21,160 +46,118 @@ export type Device = {
   updateFrequency: string;
   battery: string;
   signal: string;
+  serverLocationId: ServerLocationId;
+  connectivity: DeviceConnectivity;
+  projects: DeviceProjectAssignment[];
 };
 
-type SeedGroupId = 'group-2' | 'group-3' | 'group-4' | 'group-5';
+const CATEGORIES = [
+  { id: 'data-collectors', label: 'Data collectors' },
+  { id: 'groundworks', label: 'Groundworks' },
+  { id: 'machine-control', label: 'Machine control' },
+  { id: 'gnss-receivers', label: 'GNSS receivers and smart antennas' },
+  { id: 'additional-gnss', label: 'Additional GNSS and surveying equipment' },
+] as const;
 
-type SeedDevice = {
-  name: string;
-  serialNumber?: string;
-  groupId: SeedGroupId;
+type DeviceCategory = (typeof CATEGORIES)[number]['label'];
+
+const CATEGORY_LABELS = new Set<string>(CATEGORIES.map((category) => category.label));
+
+function isServerLocationId(value: string): value is ServerLocationId {
+  return SERVER_LOCATION_IDS.has(value);
+}
+
+function isCategory(value: string): value is DeviceCategory {
+  return CATEGORY_LABELS.has(value);
+}
+
+function isConnectivity(value: string): value is DeviceConnectivity {
+  return value === 'on' || value === 'off';
+}
+
+type LoadedDevice = {
+  device: Device;
+  category: DeviceCategory;
 };
 
-const CURRENT_FIRMWARE = '4.2.1';
-const AVAILABLE_FIRMWARE = '4.3.5';
+function loadDevices(): LoadedDevice[] {
+  const seenIds = new Set<string>();
+  const seenModels = new Set<string>();
 
-const NAMED_DEVICES: SeedDevice[] = [
-  { name: 'M13RC-HNZ-1E', serialNumber: '3140302550', groupId: 'group-2' },
-  { name: 'S23E-D1-Bench', serialNumber: '1277100511', groupId: 'group-2' },
-  { name: 'S23E-D1-Bench', serialNumber: '3100302690', groupId: 'group-2' },
-  { name: '27ND1041', serialNumber: '17311430XT', groupId: 'group-2' },
-  { name: 'HS-XL-TABLE', serialNumber: '2140301243', groupId: 'group-3' },
-  { name: 'A1-Drawer', serialNumber: '19003000C5', groupId: 'group-3' },
-  { name: 'CT-Desk-Model', serialNumber: '21348004EF', groupId: 'group-3' },
-  { name: 'M4-Table', serialNumber: '19003051GH', groupId: 'group-3' },
-  { name: 'Neu-x-Shelf', serialNumber: '1211100831', groupId: 'group-4' },
-  { name: 'X5-Round-Table', serialNumber: '2301300766', groupId: 'group-4' },
-  { name: 'O1-Conference-Table', serialNumber: '1992301-MAN', groupId: 'group-4' },
-  { name: 'B2-Writing-Desk', serialNumber: '145030050P', groupId: 'group-5' },
-  { name: 'C3-Workstation', serialNumber: '17503032QS', groupId: 'group-5' },
-  { name: 'Garnet-Table', serialNumber: '15980225T', groupId: 'group-5' },
-];
+  return deviceRecords.map((record) => {
+    if (!isServerLocationId(record.serverLocation)) {
+      throw new Error(`Unknown server location for ${record.deviceId}: ${record.serverLocation}`);
+    }
+    if (!isCategory(record.category)) {
+      throw new Error(`Unknown category for ${record.deviceId}: ${record.category}`);
+    }
+    if (!isConnectivity(record.connectivity)) {
+      throw new Error(`Unknown connectivity for ${record.deviceId}: ${record.connectivity}`);
+    }
+    if (record.remoteAccessSupported !== 'yes' && record.remoteAccessSupported !== 'no') {
+      throw new Error(`Unknown remote access support for ${record.deviceId}`);
+    }
+    if (seenIds.has(record.deviceId)) {
+      throw new Error(`Duplicate device id: ${record.deviceId}`);
+    }
+    if (seenModels.has(record.deviceModel)) {
+      throw new Error(`Duplicate device model: ${record.deviceModel}`);
+    }
+    if (record.remoteAccessSupported === 'no' && record.remoteAccessStatus !== 'notApplicable') {
+      throw new Error(`${record.deviceId} does not support remote access`);
+    }
+    if (record.remoteAccessSupported === 'yes' && record.remoteAccessStatus === 'notApplicable') {
+      throw new Error(`${record.deviceId} supports remote access`);
+    }
+    if (record.remoteAccessStatus === 'offline' && record.connectivity !== 'off') {
+      throw new Error(`${record.deviceId} is offline but still connected`);
+    }
+    if (
+      record.remoteAccessStatus === 'needsUpgrade' &&
+      record.availableFirmware === record.fieldSoftware
+    ) {
+      throw new Error(`${record.deviceId} needs an upgrade but firmware matches`);
+    }
 
-const EXTRA_DEVICES: SeedDevice[] = [
-  { name: 'N2-Bench', groupId: 'group-2' },
-  { name: 'P4-Cabinet', groupId: 'group-2' },
-  { name: 'Q7-Shelf', groupId: 'group-2' },
-  { name: 'R1-Stand', groupId: 'group-2' },
-  { name: 'S8-Cart', groupId: 'group-2' },
-  { name: 'T3-Locker', groupId: 'group-2' },
-  { name: 'U6-Bench', groupId: 'group-2' },
-  { name: 'V9-Rack', groupId: 'group-2' },
-  { name: 'W2-Table', groupId: 'group-3' },
-  { name: 'Y4-Desk', groupId: 'group-3' },
-  { name: 'Z1-Station', groupId: 'group-3' },
-  { name: 'AA-Monitor-Arm', groupId: 'group-3' },
-  { name: 'AB-File-Cabinet', groupId: 'group-3' },
-  { name: 'AC-Side-Table', groupId: 'group-3' },
-  { name: 'AD-Credenza', groupId: 'group-3' },
-  { name: 'AE-Bench-Seat', groupId: 'group-3' },
-  { name: 'AF-Tool-Chest', groupId: 'group-3' },
-  { name: 'AG-Parts-Bin', groupId: 'group-3' },
-  { name: 'AH-Work-Light', groupId: 'group-3' },
-  { name: 'AJ-Cable-Cart', groupId: 'group-3' },
-  { name: 'AK-Label-Station', groupId: 'group-3' },
-  { name: 'AL-Pack-Table', groupId: 'group-3' },
-  { name: 'AM-Draft-Table', groupId: 'group-4' },
-  { name: 'AN-Plotter', groupId: 'group-4' },
-  { name: 'AP-Scanner', groupId: 'group-4' },
-  { name: 'AQ-Printer-Stand', groupId: 'group-4' },
-  { name: 'AR-Mail-Slot', groupId: 'group-4' },
-  { name: 'AS-Reception-Desk', groupId: 'group-4' },
-  { name: 'AT-Guest-Chair', groupId: 'group-4' },
-  { name: 'AU-Lab-Bench', groupId: 'group-5' },
-  { name: 'AV-Scope-Cart', groupId: 'group-5' },
-  { name: 'AW-Sample-Fridge', groupId: 'group-5' },
-  { name: 'AX-Fume-Hood', groupId: 'group-5' },
-  { name: 'AY-Balance-Table', groupId: 'group-5' },
-  { name: 'AZ-Glass-Cabinet', groupId: 'group-5' },
-  { name: 'BA-Sink-Unit', groupId: 'group-5' },
-  { name: 'BB-Drying-Rack', groupId: 'group-5' },
-  { name: 'BC-Supply-Shelf', groupId: 'group-5' },
-];
+    seenIds.add(record.deviceId);
+    seenModels.add(record.deviceModel);
 
-const STREETS = [
-  'Anita Drive',
-  'Ben Adhem Rd',
-  'Richmond Ave',
-  'Harbor Blvd',
-  'Oak Grove',
-  'Maple Court',
-  'Cedar Lane',
-  'Pine Street',
-] as const;
-
-const MONTHS = [
-  'Jan',
-  'Feb',
-  'Mar',
-  'Apr',
-  'May',
-  'Jun',
-  'Jul',
-  'Aug',
-  'Sep',
-  'Oct',
-  'Nov',
-  'Dec',
-] as const;
-
-const UPDATE_FREQUENCIES = ['5 min', '15 min', '30 min', '60 min'] as const;
-
-function deviceDetails(index: number): Pick<
-  Device,
-  | 'lastUpdated'
-  | 'approximateLocation'
-  | 'latitude'
-  | 'longitude'
-  | 'updateFrequency'
-  | 'battery'
-  | 'signal'
-> {
-  const hour = 8 + (index % 10);
-  const minute = (index * 7) % 60;
-  const day = 1 + (index % 28);
-  const streetNumber = 120 + ((index * 37) % 800);
-  const latitude = 37.50106 + ((index % 17) - 8) * 0.0021;
-  const longitude = 122.403785 + ((index % 13) - 6) * 0.0018;
-
-  return {
-    lastUpdated: `${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')} ${MONTHS[index % MONTHS.length]} ${day} 2026`,
-    approximateLocation: `${streetNumber} ${STREETS[index % STREETS.length]}`,
-    latitude: latitude.toFixed(5),
-    longitude: longitude.toFixed(6),
-    updateFrequency: UPDATE_FREQUENCIES[index % UPDATE_FREQUENCIES.length],
-    battery: `${(index * 13) % 101}%`,
-    signal: 'Connected',
-  };
+    return {
+      category: record.category,
+      device: {
+        id: record.deviceId,
+        name: record.deviceName,
+        model: record.deviceModel,
+        serialNumber: record.serialNumber,
+        currentFirmware: record.fieldSoftware,
+        availableFirmware: record.availableFirmware,
+        lastUpdated: record.lastReported,
+        approximateLocation: record.lastKnownLocation.label,
+        latitude: String(record.lastKnownLocation.latitude),
+        longitude: String(record.lastKnownLocation.longitude),
+        updateFrequency: record.updateFrequency,
+        battery: record.battery,
+        signal: record.signal,
+        serverLocationId: record.serverLocation,
+        connectivity: record.connectivity,
+        projects: record.projects.map((assignment) => ({
+          projectId: assignment.projectId,
+          active: assignment.active,
+        })),
+      },
+    };
+  });
 }
 
-const SEEDED_GROUPS: Array<{ id: SeedGroupId; label: string }> = [
-  { id: 'group-2', label: 'Group 2' },
-  { id: 'group-3', label: 'Group 3' },
-  { id: 'group-4', label: 'Group 4' },
-  { id: 'group-5', label: 'Group 5' },
-];
+const LOADED_DEVICES = loadDevices();
 
-function toDevice(source: SeedDevice, index: number): Device {
-  return {
-    id: `device-${String(index + 1).padStart(2, '0')}`,
-    name: source.name,
-    serialNumber: source.serialNumber ?? `41003${String(index + 1).padStart(5, '0')}`,
-    currentFirmware: CURRENT_FIRMWARE,
-    availableFirmware: AVAILABLE_FIRMWARE,
-    ...deviceDetails(index),
-  };
-}
+export const DEVICES: Device[] = LOADED_DEVICES.map((item) => item.device);
 
-const SEED_DEVICES: SeedDevice[] = [...NAMED_DEVICES, ...EXTRA_DEVICES];
-
-export const DEVICES: Device[] = SEED_DEVICES.map(toDevice);
-
-export const INITIAL_GROUPS: DeviceGroup[] = SEEDED_GROUPS.map((group) => ({
-  id: group.id,
-  label: group.label,
-  deviceIds: SEED_DEVICES.flatMap((source, index) =>
-    source.groupId === group.id ? [DEVICES[index].id] : [],
+export const INITIAL_GROUPS: DeviceGroup[] = CATEGORIES.map((category) => ({
+  id: category.id,
+  label: category.label,
+  deviceIds: LOADED_DEVICES.flatMap((item) =>
+    item.category === category.label ? [item.device.id] : [],
   ),
 }));
 
@@ -208,6 +191,7 @@ export function devicesForView(groups: DeviceGroup[], groupId: string, query: st
 
     return (
       device.name.toLowerCase().includes(needle) ||
+      device.model.toLowerCase().includes(needle) ||
       device.serialNumber.toLowerCase().includes(needle)
     );
   });
