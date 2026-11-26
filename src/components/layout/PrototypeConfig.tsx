@@ -145,7 +145,7 @@ export function PrototypeConfig() {
                   label={persona.description}
                   size="sm"
                 >
-                  {persona.description}
+                  <span>{persona.description}</span>
                 </ModusWcTypography>
               </div>
             ))}
@@ -188,7 +188,7 @@ export function PrototypeConfig() {
                   label={variant.description}
                   size="sm"
                 >
-                  {variant.description}
+                  <span>{variant.description}</span>
                 </ModusWcTypography>
               </div>
             ))}

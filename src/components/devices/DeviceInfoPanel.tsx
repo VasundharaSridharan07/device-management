@@ -114,7 +114,7 @@ export function DeviceInfoPanel({
           size="sm"
           weight="semibold"
         >
-          {device?.name ?? ''}
+          <span>{device?.name ?? ''}</span>
         </ModusWcTypography>
         <ModusWcButton
           aria-label="Close"

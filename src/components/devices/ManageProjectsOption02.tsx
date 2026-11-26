@@ -23,7 +23,7 @@ export function ManageProjectsOption02({ deviceName, serialNumber }: ManageProje
           Manage projects
         </ModusWcTypography>
         <ModusWcTypography customClass="app-muted" hierarchy="p" label={subtitle} size="sm">
-          {subtitle}
+          <span>{subtitle}</span>
         </ModusWcTypography>
       </div>
       <div slot="content" className="prototype-option-placeholder">
