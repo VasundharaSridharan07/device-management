@@ -1,0 +1,23 @@
+---
+description: Do not validate or test unless the user explicitly asks
+alwaysApply: true
+---
+
+# Skip validation unless asked
+
+Finish the requested implementation, then stop. Do not start tests, browser checks, screenshots, lint passes, or other verification on your own.
+
+- Run validation only when the current message explicitly asks for it (for example "test this", "verify in the browser", "run the tests").
+- If validation looks useful and they did not ask, ask once and wait. Do not start it while waiting.
+- A prior yes does not carry forward. Each new task needs a fresh ask or an explicit request in that message.
+- Validation covers unit and end-to-end tests, dev-server checks, browser flows, screenshots, and lint or typecheck runs done only to prove the change works.
+- Reading code and making the change stay in scope.
+
+```text
+// User: "Add a filter to the device table"
+// Do: implement the filter, then ask whether to verify.
+// Do not: open the browser, run tests, or take screenshots.
+
+// User: "Add a filter and verify it in the browser"
+// Do: implement the filter and verify it in the browser.
+```
