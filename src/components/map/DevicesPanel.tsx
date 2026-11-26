@@ -16,11 +16,16 @@ import type { ISelectOption } from '@trimble-oss/moduswebcomponents';
 import { useState, type RefObject } from 'react';
 
 import {
+  assetRowDetail,
+  deviceRowDetail,
+  type MapAssetItem,
+  type MapDeviceItem,
+} from '../../data/mapEntities';
+import {
   GEOFENCE_GROUPS,
-  MAP_ASSETS,
   MAP_GEOFENCES,
   isMapFilter,
-  type MapAsset,
+  type MapEntityView,
   type MapFilter,
   type MapGeofence,
   type MapGeofenceCategory,
@@ -34,8 +39,12 @@ const FILTER_OPTIONS: ISelectOption[] = [
 ];
 
 type DevicesPanelProps = {
-  assets: MapAsset[];
+  assetQuery: string;
+  assetSearchRef: RefObject<HTMLModusWcTextInputElement | null>;
+  assets: MapAssetItem[];
   categoryVisibility: Record<MapGeofenceCategory, boolean>;
+  devices: MapDeviceItem[];
+  entityView: MapEntityView;
   filter: MapFilter;
   geofenceQuery: string;
   geofenceSearchRef: RefObject<HTMLModusWcTextInputElement | null>;
@@ -46,6 +55,9 @@ type DevicesPanelProps = {
   selectedGeofenceId: string | null;
   selectedId: string | null;
   view: MapPanelView;
+  visibleAssetIds: string[];
+  visibleDeviceIds: string[];
+  onAssetQueryChange: (query: string) => void;
   onCategoryVisibilityChange: (category: MapGeofenceCategory, visible: boolean) => void;
   onClose: () => void;
   onFilterChange: (filter: MapFilter) => void;
@@ -57,12 +69,54 @@ type DevicesPanelProps = {
 };
 
 function DeviceRow({
+  device,
+  hidden,
+  selected,
+  onSelect,
+}: {
+  device: MapDeviceItem;
+  hidden: boolean;
+  selected: boolean;
+  onSelect: (id: string) => void;
+}) {
+  return (
+    <ModusWcMenuItem
+      hidden={hidden}
+      label={device.name}
+      selected={selected}
+      size="sm"
+      subLabel={deviceRowDetail(device)}
+      value={device.id}
+      onItemSelect={() => onSelect(device.id)}
+    >
+      <span className="map-device-icons" slot="start-icon">
+        <img
+          alt=""
+          className="map-list-marker"
+          height={24}
+          src={device.markerUrl}
+          width={24}
+        />
+        <ModusWcIcon
+          aria-label="Alert"
+          customClass="map-device-alert"
+          decorative={false}
+          hidden={!device.alert}
+          name="warning"
+          size="sm"
+        />
+      </span>
+    </ModusWcMenuItem>
+  );
+}
+
+function AssetRow({
   asset,
   hidden,
   selected,
   onSelect,
 }: {
-  asset: MapAsset;
+  asset: MapAssetItem;
   hidden: boolean;
   selected: boolean;
   onSelect: (id: string) => void;
@@ -73,21 +127,18 @@ function DeviceRow({
       label={asset.name}
       selected={selected}
       size="sm"
-      subLabel={`Last Report: ${asset.lastReport}`}
+      subLabel={assetRowDetail(asset)}
       value={asset.id}
       onItemSelect={() => onSelect(asset.id)}
     >
-      <span className="map-device-icons" slot="start-icon">
-        <ModusWcIcon decorative name="in_field_device" size="sm" />
-        <ModusWcIcon
-          aria-label="Alert"
-          customClass="map-device-alert"
-          decorative={false}
-          hidden={!asset.alert}
-          name="warning"
-          size="sm"
-        />
-      </span>
+      <img
+        alt=""
+        className="map-list-marker"
+        height={24}
+        slot="start-icon"
+        src={asset.markerUrl}
+        width={24}
+      />
     </ModusWcMenuItem>
   );
 }
@@ -115,7 +166,7 @@ function readControlValue(event: CustomEvent<InputEvent>): string {
 }
 
 function readView(label: string | undefined): MapPanelView | null {
-  if (label === 'Devices') {
+  if (label === 'Devices' || label === 'Assets') {
     return 'devices';
   }
   if (label === 'Geofences') {
@@ -125,8 +176,12 @@ function readView(label: string | undefined): MapPanelView | null {
 }
 
 export function DevicesPanel({
+  assetQuery,
+  assetSearchRef,
   assets,
   categoryVisibility,
+  devices,
+  entityView,
   filter,
   geofenceQuery,
   geofenceSearchRef,
@@ -137,6 +192,9 @@ export function DevicesPanel({
   selectedGeofenceId,
   selectedId,
   view,
+  visibleAssetIds,
+  visibleDeviceIds,
+  onAssetQueryChange,
   onCategoryVisibilityChange,
   onClose,
   onFilterChange,
@@ -152,11 +210,15 @@ export function DevicesPanel({
     avoidance: true,
   });
   const geofenceView = view === 'geofences';
+  const assetView = entityView === 'assets';
+  const listLabel = assetView ? 'Assets' : 'Devices';
+  const visibleDevices = new Set(visibleDeviceIds);
+  const visibleAssets = new Set(visibleAssetIds);
 
   return (
     <div className="map-devices-panel" hidden={hidden}>
       <ModusWcPanel
-        aria-label={geofenceView ? 'Geofences' : 'Devices'}
+        aria-label={geofenceView ? 'Geofences' : listLabel}
         floating
         height="100%"
         width="320px"
@@ -176,14 +238,14 @@ export function DevicesPanel({
               }}
             >
               <ModusWcButton pressed={view === 'devices'} size="sm">
-                Devices
+                <span>{listLabel}</span>
               </ModusWcButton>
               <ModusWcButton pressed={view === 'geofences'} size="sm">
                 Geofences
               </ModusWcButton>
             </ModusWcButtonGroup>
             <ModusWcButton
-              aria-label={geofenceView ? 'Close geofences' : 'Close devices'}
+              aria-label={geofenceView ? 'Close geofences' : `Close ${listLabel.toLowerCase()}`}
               color="tertiary"
               shape="square"
               size="sm"
@@ -193,7 +255,7 @@ export function DevicesPanel({
               <ModusWcIcon decorative name="close" size="xs" />
             </ModusWcButton>
           </div>
-          <div className="map-device-tools" hidden={geofenceView}>
+          <div className="map-device-tools" hidden={geofenceView || assetView}>
             <ModusWcTextInput
               ref={searchRef}
               aria-label="Search devices"
@@ -214,6 +276,17 @@ export function DevicesPanel({
                   onFilterChange(next);
                 }
               }}
+            />
+          </div>
+          <div className="map-device-tools" hidden={geofenceView || !assetView}>
+            <ModusWcTextInput
+              ref={assetSearchRef}
+              aria-label="Search assets"
+              includeSearch
+              placeholder="Search"
+              size="sm"
+              value={assetQuery}
+              onInputChange={(event) => onAssetQueryChange(readControlValue(event))}
             />
           </div>
           <div className="map-geofence-tools" hidden={!geofenceView}>
@@ -238,24 +311,48 @@ export function DevicesPanel({
           </div>
         </div>
         <div className="map-devices-body" slot="body">
-          <div hidden={geofenceView}>
+          <div hidden={geofenceView || assetView}>
             <ModusWcTypography
               customClass="app-muted map-devices-empty"
-              hidden={assets.length > 0}
+              hidden={visibleDeviceIds.length > 0}
               label="No devices match this search."
             />
             <ModusWcMenu
               aria-label="Devices"
               customClass="map-device-list"
-              hidden={assets.length === 0}
+              hidden={visibleDeviceIds.length === 0}
               selectionMode="single"
               size="sm"
             >
-              {MAP_ASSETS.map((asset) => (
+              {devices.map((device) => (
                 <DeviceRow
+                  key={device.id}
+                  device={device}
+                  hidden={!visibleDevices.has(device.id)}
+                  selected={selectedId === device.id}
+                  onSelect={onSelect}
+                />
+              ))}
+            </ModusWcMenu>
+          </div>
+          <div hidden={geofenceView || !assetView}>
+            <ModusWcTypography
+              customClass="app-muted map-devices-empty"
+              hidden={visibleAssetIds.length > 0}
+              label="No assets match this search."
+            />
+            <ModusWcMenu
+              aria-label="Assets"
+              customClass="map-device-list"
+              hidden={visibleAssetIds.length === 0}
+              selectionMode="single"
+              size="sm"
+            >
+              {assets.map((asset) => (
+                <AssetRow
                   key={asset.id}
                   asset={asset}
-                  hidden={!assets.some((item) => item.id === asset.id)}
+                  hidden={!visibleAssets.has(asset.id)}
                   selected={selectedId === asset.id}
                   onSelect={onSelect}
                 />

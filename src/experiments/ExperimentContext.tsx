@@ -1,9 +1,11 @@
 import { createContext, useCallback, useContext, useMemo, useState, type ReactNode } from 'react';
 
+import type { NavItemId } from '../nav';
 import {
   loadExperimentConfig,
   saveExperimentConfig,
   type ExperimentConfig,
+  type InventoryViewId,
   type ManageProjectsVariantId,
   type PersonaId,
 } from './config';
@@ -12,6 +14,8 @@ type ExperimentContextValue = {
   config: ExperimentConfig;
   setPersona: (persona: PersonaId) => void;
   setManageProjects: (variant: ManageProjectsVariantId) => void;
+  setInventoryView: (inventoryView: InventoryViewId) => void;
+  setSideNav: (sideNav: NavItemId[]) => void;
 };
 
 const ExperimentContext = createContext<ExperimentContextValue | null>(null);
@@ -41,9 +45,23 @@ export function ExperimentProvider({ children }: { children: ReactNode }) {
     [update],
   );
 
+  const setInventoryView = useCallback(
+    (inventoryView: InventoryViewId) => {
+      update({ inventoryView });
+    },
+    [update],
+  );
+
+  const setSideNav = useCallback(
+    (sideNav: NavItemId[]) => {
+      update({ sideNav });
+    },
+    [update],
+  );
+
   const value = useMemo(
-    () => ({ config, setPersona, setManageProjects }),
-    [config, setManageProjects, setPersona],
+    () => ({ config, setPersona, setManageProjects, setInventoryView, setSideNav }),
+    [config, setInventoryView, setManageProjects, setPersona, setSideNav],
   );
 
   return <ExperimentContext.Provider value={value}>{children}</ExperimentContext.Provider>;

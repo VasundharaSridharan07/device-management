@@ -10,8 +10,11 @@ import type { ITableColumn } from '@trimble-oss/moduswebcomponents';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
 import deviceIcon from '../../assets/custom-icons/device.svg';
+import { NO_ASSOCIATED_ASSET } from '../../data/assets';
 import type { Device } from '../../data/devices';
+import { useFleet } from '../../data/FleetContext';
 import { closeModusDialog, showModusDialog } from './modusDialog';
+import { openRowButton } from './reportingDisplay';
 
 const ADD_DEVICES_MODAL_ID = 'add-devices-modal';
 
@@ -105,6 +108,12 @@ const COLUMNS: ITableColumn[] = [
     header: 'Available',
     sortable: true,
   },
+  {
+    id: 'associatedAsset',
+    accessor: 'associatedAsset',
+    header: 'Associated asset',
+    sortable: true,
+  },
 ];
 
 const PICKER_COLUMNS: ITableColumn[] = COLUMNS.filter(
@@ -140,10 +149,29 @@ export function DeviceTable({
   onAddDevices,
   onRemoveDevices,
 }: DeviceTableProps) {
-  const [searchOpen, setSearchOpen] = useState(false);
+  const { assetForDevice } = useFleet();
+  const [searchOpen, setSearchOpen] = useState(query.trim().length > 0);
   const [pickerIds, setPickerIds] = useState<string[]>([]);
   const [pickerSession, setPickerSession] = useState(0);
   const searchRef = useRef<HTMLModusWcTextInputElement>(null);
+  const columns = useMemo<ITableColumn[]>(
+    () => [
+      ...COLUMNS,
+      {
+        id: 'open',
+        accessor: 'id',
+        header: 'Actions',
+        width: '6rem',
+        cellRenderer: (value, row) => {
+          const record = row as { id?: string; name?: string };
+          const id = typeof record.id === 'string' ? record.id : typeof value === 'string' ? value : '';
+          const name = typeof record.name === 'string' ? record.name : 'device';
+          return openRowButton(name, () => onDeviceOpen(id));
+        },
+      },
+    ],
+    [onDeviceOpen],
+  );
   const rows = useMemo(
     () =>
       devices.map((device) => ({
@@ -154,11 +182,12 @@ export function DeviceTable({
         serialNumber: device.serialNumber,
         currentFirmware: device.currentFirmware,
         availableFirmware: device.availableFirmware,
+        associatedAsset: assetForDevice(device.id)?.name ?? NO_ASSOCIATED_ASSET,
       })),
-    [devices],
+    [assetForDevice, devices],
   );
   // Remount when the visible rows change so the table body repaints.
-  const tableKey = rows.map((row) => row.id).join('|');
+  const tableKey = rows.map((row) => `${row.id}:${row.associatedAsset}`).join('|');
 
   useEffect(() => {
     if (searchOpen) {
@@ -271,7 +300,7 @@ export function DeviceTable({
       <ModusWcTable
         key={tableKey}
         caption="Devices"
-        columns={COLUMNS}
+        columns={columns}
         data={rows}
         density="compact"
         hover

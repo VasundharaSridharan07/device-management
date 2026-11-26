@@ -1,18 +1,10 @@
-import { DEVICES } from './devices';
+import projectRecords from './projects.json' with { type: 'json' };
 
 export type MapBasemap = 'street' | 'satellite';
 
 export type MapFilter = 'all' | 'alerts' | 'unavailable';
 
-export type MapAsset = {
-  id: string;
-  name: string;
-  lastReport: string;
-  alert: boolean;
-  unavailable: boolean;
-  latitude: number;
-  longitude: number;
-};
+export type MapEntityView = 'devices' | 'assets';
 
 export type MapGeofenceCategory = 'geofence' | 'project-boundary' | 'avoidance';
 
@@ -46,19 +38,37 @@ export const GEOFENCE_GROUPS: {
   },
 ];
 
-export const MAP_CENTER: [number, number] = [-43.5438, 172.596];
-export const MAP_ZOOM = 16;
+/** 10368 Westmoor Dr, Westminster, CO. Both worksites fit at this zoom. */
+export const MAP_CENTER: [number, number] = [39.89715, -105.11539];
+export const MAP_ZOOM = 15;
 
-/** Pins follow each device's last known location. Unavailable follows connectivity off. */
-export const MAP_ASSETS: MapAsset[] = DEVICES.map((device) => ({
-  id: device.id,
-  name: device.name,
-  lastReport: device.lastUpdated,
-  alert: false,
-  unavailable: device.connectivity === 'off',
-  latitude: Number(device.latitude),
-  longitude: Number(device.longitude),
-}));
+/**
+ * Four scenario assets around Westmoor Dr. Two sit inside Sanders Dam Worksite
+ * and two inside Riverway Extension. Each asset and its devices share one site.
+ */
+export const SCENE_SITES = {
+  excavator: { label: 'Sanders Dam pad', latitude: 39.898, longitude: -105.1264 },
+  dozer: { label: 'Sanders Dam west', latitude: 39.8966, longitude: -105.1242 },
+  receiver: { label: 'Riverway yard', latitude: 39.8974, longitude: -105.1154 },
+  tablet: { label: 'Riverway south', latitude: 39.8964, longitude: -105.1142 },
+} as const;
+
+const BOUNDARY_PROJECT_IDS = ['g432DvVWd38', 'wX5yZ6aB7cD'] as const;
+
+function projectBoundary(projectId: string): MapGeofence {
+  const record = projectRecords.find((item) => item.id === projectId);
+  if (!record) {
+    throw new Error(`Missing project boundary ${projectId}`);
+  }
+
+  const positions = JSON.parse(record.address.geometry) as [number, number][];
+  return {
+    id: `project-${projectId}`,
+    name: record.name,
+    category: 'project-boundary',
+    positions,
+  };
+}
 
 export const MAP_GEOFENCES: MapGeofence[] = [
   {
@@ -66,10 +76,10 @@ export const MAP_GEOFENCES: MapGeofence[] = [
     name: 'Birmingham West',
     category: 'geofence',
     positions: [
-      [-43.5448, 172.5974],
-      [-43.5434, 172.5996],
-      [-43.5452, 172.6008],
-      [-43.5464, 172.5982],
+      [39.9026, -105.1292],
+      [39.9028, -105.1256],
+      [39.9016, -105.1254],
+      [39.9014, -105.129],
     ],
   },
   {
@@ -77,10 +87,10 @@ export const MAP_GEOFENCES: MapGeofence[] = [
     name: 'Birmingham East',
     category: 'geofence',
     positions: [
-      [-43.5414, 172.6004],
-      [-43.5408, 172.6046],
-      [-43.5436, 172.6052],
-      [-43.5442, 172.601],
+      [39.9014, -105.1176],
+      [39.9016, -105.1134],
+      [39.9004, -105.1132],
+      [39.9002, -105.1174],
     ],
   },
   {
@@ -88,10 +98,10 @@ export const MAP_GEOFENCES: MapGeofence[] = [
     name: 'West yard',
     category: 'geofence',
     positions: [
-      [-43.5456, 172.5924],
-      [-43.5442, 172.5948],
-      [-43.5462, 172.5956],
-      [-43.5474, 172.5932],
+      [39.899, -105.1344],
+      [39.8988, -105.1324],
+      [39.8968, -105.1326],
+      [39.897, -105.1346],
     ],
   },
   {
@@ -99,32 +109,22 @@ export const MAP_GEOFENCES: MapGeofence[] = [
     name: 'South pad',
     category: 'geofence',
     positions: [
-      [-43.5484, 172.5962],
-      [-43.5474, 172.5986],
-      [-43.549, 172.5994],
-      [-43.5498, 172.5968],
+      [39.8938, -105.117],
+      [39.8936, -105.1136],
+      [39.8924, -105.1138],
+      [39.8926, -105.1172],
     ],
   },
-  {
-    id: 'site-boundary',
-    name: 'Site boundary',
-    category: 'project-boundary',
-    positions: [
-      [-43.5496, 172.5912],
-      [-43.5382, 172.5912],
-      [-43.5382, 172.6078],
-      [-43.5496, 172.6078],
-    ],
-  },
+  ...BOUNDARY_PROJECT_IDS.map(projectBoundary),
   {
     id: 'stockpile-exclusion',
     name: 'Stockpile exclusion',
     category: 'avoidance',
     positions: [
-      [-43.5406, 172.5936],
-      [-43.5398, 172.5952],
-      [-43.5412, 172.596],
-      [-43.542, 172.5942],
+      [39.8974, -105.1292],
+      [39.8976, -105.1278],
+      [39.8964, -105.1276],
+      [39.8962, -105.129],
     ],
   },
   {
@@ -132,43 +132,22 @@ export const MAP_GEOFENCES: MapGeofence[] = [
     name: 'Haul road buffer',
     category: 'avoidance',
     positions: [
-      [-43.547, 172.6024],
-      [-43.5462, 172.6052],
-      [-43.547, 172.6056],
-      [-43.5478, 172.6028],
+      [39.899, -105.1206],
+      [39.8988, -105.1196],
+      [39.8958, -105.1198],
+      [39.896, -105.1208],
     ],
   },
 ];
 
-/** Alert total stays as map chrome. Asset and geofence counts match the catalogs. */
+/** Alert total stays as map chrome. The entity count follows the active map view. */
 export const MAP_COUNTS = {
-  assets: MAP_ASSETS.length,
   geofences: MAP_GEOFENCES.length,
   alerts: 94,
 } as const;
 
 export function isMapFilter(value: string): value is MapFilter {
   return value === 'all' || value === 'alerts' || value === 'unavailable';
-}
-
-export function visibleMapAssets(query: string, filter: MapFilter): MapAsset[] {
-  const needle = query.trim().toLowerCase();
-
-  return MAP_ASSETS.filter((asset) => {
-    if (filter === 'alerts' && !asset.alert) {
-      return false;
-    }
-
-    if (filter === 'unavailable' && !asset.unavailable) {
-      return false;
-    }
-
-    if (needle.length > 0 && !asset.name.toLowerCase().includes(needle)) {
-      return false;
-    }
-
-    return true;
-  });
 }
 
 export function visibleMapGeofences(query: string): MapGeofence[] {
