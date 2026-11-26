@@ -889,7 +889,7 @@ ul.map-geofence-list .modus-wc-menu-item-sublabel {
   align-items: center;
   gap: var(--modus-wc-spacing-md, 0.75rem);
   padding: var(--modus-wc-spacing-2xs, 0.25rem) var(--modus-wc-spacing-sm, 0.5rem);
-  border-radius: var(--modus-wc-radius-sm, 0.25rem);
+  border-radius: var(--modus-wc-border-radius-sm);
   background-color: color-mix(in srgb, var(--modus-wc-color-base-100) 88%, transparent);
 }
 

@@ -94,10 +94,10 @@ function ProjectColumn({
     <section aria-label={title} className="manage-projects-column">
       <div className="manage-projects-column-heading">
         <ModusWcTypography hierarchy="h3" label={title} size="sm" weight="semibold">
-          {title}
+          <span>{title}</span>
         </ModusWcTypography>
         <ModusWcTypography hierarchy="p" label={String(count)} size="sm">
-          {count}
+          <span>{count}</span>
         </ModusWcTypography>
       </div>
       <ModusWcTextInput
@@ -112,7 +112,7 @@ function ProjectColumn({
       />
       {visible.length === 0 ? (
         <ModusWcTypography customClass="app-muted" hierarchy="p" label={emptyMessage} size="sm">
-          {emptyMessage}
+          <span>{emptyMessage}</span>
         </ModusWcTypography>
       ) : (
         <ul className="manage-projects-list">
@@ -127,7 +127,7 @@ function ProjectColumn({
                   target="_blank"
                 >
                   <ModusWcTypography hierarchy="p" label={project.name} size="sm">
-                    {project.name}
+                    <span>{project.name}</span>
                   </ModusWcTypography>
                 </a>
                 {active ? (
@@ -281,7 +281,7 @@ export function DeviceProjects({
           Projects
         </ModusWcTypography>
         <ModusWcTypography hierarchy="p" label={String(assigned.length)} size="sm">
-          {assigned.length}
+          <span>{assigned.length}</span>
         </ModusWcTypography>
       </div>
       {assigned.length === 0 ? (
@@ -303,7 +303,7 @@ export function DeviceProjects({
               label={project.name}
               size="sm"
             >
-              {project.name}
+              <span>{project.name}</span>
             </ModusWcTypography>
           ))}
           {hiddenCount > 0 ? (
@@ -318,7 +318,7 @@ export function DeviceProjects({
           ) : null}
           {activeCount > 0 ? (
             <ModusWcTypography customClass="app-muted" hierarchy="p" label={activeLabel} size="sm">
-              {activeLabel}
+              <span>{activeLabel}</span>
             </ModusWcTypography>
           ) : null}
         </div>
@@ -350,7 +350,7 @@ export function DeviceProjects({
             Manage projects
           </ModusWcTypography>
           <ModusWcTypography customClass="app-muted" hierarchy="p" label={subtitle} size="sm">
-            {subtitle}
+            <span>{subtitle}</span>
           </ModusWcTypography>
         </div>
         <div slot="content" className="manage-projects-body">
@@ -378,7 +378,7 @@ export function DeviceProjects({
           </ModusWcTypography>
           {outsideCount > 0 ? (
             <ModusWcTypography customClass="app-muted" hierarchy="p" label={outsideLabel} size="sm">
-              {outsideLabel}
+              <span>{outsideLabel}</span>
             </ModusWcTypography>
           ) : null}
           <div className="manage-projects-columns">
@@ -423,7 +423,7 @@ export function DeviceProjects({
         </div>
         <div slot="content">
           <ModusWcTypography hierarchy="p" label={confirmMessage} size="sm">
-            {confirmMessage}
+            <span>{confirmMessage}</span>
           </ModusWcTypography>
         </div>
         <div slot="footer" className="device-modal-actions">
