@@ -1,40 +1,51 @@
 import {
   divIcon,
+  latLngBounds,
+  layerGroup,
   map as createMap,
   marker,
   polygon,
   tileLayer,
+  type LayerGroup,
   type Map as LeafletMap,
-  type Marker,
   type PathOptions,
   type Polygon,
   type TileLayer,
 } from 'leaflet';
-import { forwardRef, useEffect, useImperativeHandle, useRef } from 'react';
+import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import 'leaflet/dist/leaflet.css';
 
+import type { MapPin } from '../../data/mapEntities';
 import {
-  MAP_ASSETS,
   MAP_CENTER,
   MAP_GEOFENCES,
   MAP_ZOOM,
   type MapBasemap,
   type MapGeofenceCategory,
 } from '../../data/mapScene';
+import type { MapCamera } from '../../data/mapSession';
+import { placePins } from './clusterPins';
 
 const STREET_TILES = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
 const SATELLITE_TILES =
   'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}';
 
+const PIN_SIZE = 40;
+
 export type MapCanvasHandle = {
   zoomIn: () => void;
+  getCamera: () => MapCamera | null;
 };
 
 type MapCanvasProps = {
   basemap: MapBasemap;
   categoryVisibility: Record<MapGeofenceCategory, boolean>;
+  initialCamera: MapCamera | null;
+  pinKind: 'device' | 'asset';
+  pins: MapPin[];
   selectedGeofenceId: string | null;
   selectedId: string | null;
+  onCameraChange: (camera: MapCamera) => void;
   onSelect: (id: string) => void;
   onSelectGeofence: (id: string) => void;
 };
@@ -66,19 +77,27 @@ function modusColor(name: string): string {
   return value || 'currentColor';
 }
 
-function markerIcon(alert: boolean, selected: boolean) {
-  const className = ['map-marker'];
-  if (alert) {
-    className.push('map-marker-alert');
-  }
-  if (selected) {
-    className.push('map-marker-selected');
-  }
+function motionOk(): boolean {
+  return !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+}
 
+function pinIcon(url: string, selected: boolean) {
+  const className = selected ? 'map-pin map-pin-selected' : 'map-pin';
   return divIcon({
-    className: className.join(' '),
-    iconSize: [18, 18],
-    iconAnchor: [9, 9],
+    className,
+    html: `<img class="map-pin-image" alt="" src="${url}" width="${PIN_SIZE}" height="${PIN_SIZE}" />`,
+    iconSize: [PIN_SIZE, PIN_SIZE],
+    iconAnchor: [PIN_SIZE / 2, PIN_SIZE],
+  });
+}
+
+function clusterIcon(count: number, selected: boolean) {
+  const className = selected ? 'map-cluster map-cluster-selected' : 'map-cluster';
+  return divIcon({
+    className,
+    html: `<span class="map-cluster-count">${count}</span>`,
+    iconSize: [PIN_SIZE, PIN_SIZE],
+    iconAnchor: [PIN_SIZE / 2, PIN_SIZE / 2],
   });
 }
 
@@ -130,31 +149,69 @@ function geofenceStyle(category: MapGeofenceCategory, selected: boolean): PathOp
   };
 }
 
+function readCamera(map: LeafletMap): MapCamera {
+  const center = map.getCenter();
+  return { latitude: center.lat, longitude: center.lng, zoom: map.getZoom() };
+}
+
 export const MapCanvas = forwardRef<MapCanvasHandle, MapCanvasProps>(function MapCanvas(
-  { basemap, categoryVisibility, selectedGeofenceId, selectedId, onSelect, onSelectGeofence },
+  {
+    basemap,
+    categoryVisibility,
+    initialCamera,
+    pinKind,
+    pins,
+    selectedGeofenceId,
+    selectedId,
+    onCameraChange,
+    onSelect,
+    onSelectGeofence,
+  },
   ref,
 ) {
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<LeafletMap | null>(null);
   const streetRef = useRef<TileLayer | null>(null);
   const satelliteRef = useRef<TileLayer | null>(null);
-  const markersRef = useRef<Map<string, Marker>>(new Map());
+  const markersRef = useRef<LayerGroup | null>(null);
   const polygonsRef = useRef<Map<string, DrawnGeofence>>(new Map());
+  const pinsRef = useRef(pins);
   const selectedGeofenceRef = useRef(selectedGeofenceId);
   const categoryVisibilityRef = useRef(categoryVisibility);
   const onSelectRef = useRef(onSelect);
   const onSelectGeofenceRef = useRef(onSelectGeofence);
+  const onCameraChangeRef = useRef(onCameraChange);
+  const initialCameraRef = useRef(initialCamera);
+  const skipInitialPan = useRef(true);
+  const skipInitialGeofence = useRef(true);
+  const [mapReady, setMapReady] = useState(false);
+  const [viewRevision, setViewRevision] = useState(0);
 
   useEffect(() => {
+    pinsRef.current = pins;
     onSelectRef.current = onSelect;
     onSelectGeofenceRef.current = onSelectGeofence;
+    onCameraChangeRef.current = onCameraChange;
     selectedGeofenceRef.current = selectedGeofenceId;
     categoryVisibilityRef.current = categoryVisibility;
-  }, [categoryVisibility, onSelect, onSelectGeofence, selectedGeofenceId]);
+    initialCameraRef.current = initialCamera;
+  }, [
+    categoryVisibility,
+    initialCamera,
+    onCameraChange,
+    onSelect,
+    onSelectGeofence,
+    pins,
+    selectedGeofenceId,
+  ]);
 
   useImperativeHandle(ref, () => ({
     zoomIn() {
       mapRef.current?.zoomIn();
+    },
+    getCamera() {
+      const map = mapRef.current;
+      return map ? readCamera(map) : null;
     },
   }));
 
@@ -164,11 +221,15 @@ export const MapCanvas = forwardRef<MapCanvasHandle, MapCanvasProps>(function Ma
       return;
     }
 
+    const start = initialCameraRef.current;
     const map = createMap(node, {
       attributionControl: true,
       scrollWheelZoom: true,
       zoomControl: false,
-    }).setView(MAP_CENTER, MAP_ZOOM);
+    }).setView(
+      start ? [start.latitude, start.longitude] : MAP_CENTER,
+      start?.zoom ?? MAP_ZOOM,
+    );
 
     const street = tileLayer(STREET_TILES, {
       attribution: '© OpenStreetMap',
@@ -195,25 +256,21 @@ export const MapCanvas = forwardRef<MapCanvasHandle, MapCanvasProps>(function Ma
       polygons.set(geofence.id, { category: geofence.category, shape });
     }
 
-    const markers = new Map<string, Marker>();
-    for (const asset of MAP_ASSETS) {
-      const pin = marker([asset.latitude, asset.longitude], {
-        icon: markerIcon(asset.alert, false),
-        keyboard: true,
-        title: asset.name,
-      });
-      pin.on('click', () => {
-        onSelectRef.current(asset.id);
-      });
-      pin.addTo(map);
-      markers.set(asset.id, pin);
-    }
+    const markers = layerGroup().addTo(map);
+
+    const publishView = () => {
+      onCameraChangeRef.current(readCamera(map));
+      setViewRevision((value) => value + 1);
+    };
+    map.on('moveend', publishView);
 
     mapRef.current = map;
     streetRef.current = street;
     satelliteRef.current = satellite;
     markersRef.current = markers;
     polygonsRef.current = polygons;
+    onCameraChangeRef.current(readCamera(map));
+    setMapReady(true);
 
     const resize = () => {
       map.invalidateSize();
@@ -243,11 +300,12 @@ export const MapCanvas = forwardRef<MapCanvasHandle, MapCanvasProps>(function Ma
       cancelAnimationFrame(frame);
       resizeObserver.disconnect();
       themeObserver.disconnect();
+      map.off('moveend', publishView);
       map.remove();
       mapRef.current = null;
       streetRef.current = null;
       satelliteRef.current = null;
-      markersRef.current = new Map();
+      markersRef.current = null;
       polygonsRef.current = new Map();
     };
   }, []);
@@ -273,32 +331,89 @@ export const MapCanvas = forwardRef<MapCanvasHandle, MapCanvasProps>(function Ma
   useEffect(() => {
     const map = mapRef.current;
     const markers = markersRef.current;
+    if (!mapReady || !map || !markers) {
+      return;
+    }
+
+    markers.clearLayers();
+    const noun = pinKind === 'asset' ? 'asset' : 'device';
+    const placements = placePins(
+      pins,
+      map.getZoom(),
+      MAP_ZOOM,
+      (latitude, longitude) => {
+        const point = map.latLngToContainerPoint([latitude, longitude]);
+        return { x: point.x, y: point.y };
+      },
+      (point) => {
+        const latLng = map.containerPointToLatLng([point.x, point.y]);
+        return { latitude: latLng.lat, longitude: latLng.lng };
+      },
+    );
+
+    for (const placement of placements) {
+      if (placement.kind === 'cluster') {
+        const count = placement.ids.length;
+        const label = `${count} ${count === 1 ? noun : `${noun}s`}`;
+        const pin = marker([placement.latitude, placement.longitude], {
+          icon: clusterIcon(count, placement.ids.includes(selectedId ?? '')),
+          keyboard: true,
+          title: label,
+          zIndexOffset: placement.ids.includes(selectedId ?? '') ? 1000 : 500,
+        });
+        pin.on('click', () => {
+          const bounds = latLngBounds(
+            placement.sites.map((site) => [site.latitude, site.longitude] as [number, number]),
+          );
+          map.fitBounds(bounds, {
+            animate: motionOk(),
+            maxZoom: Math.max(map.getZoom() + 2, MAP_ZOOM),
+            padding: [72, 72],
+          });
+        });
+        pin.addTo(markers);
+        continue;
+      }
+
+      const source = pins.find((item) => item.id === placement.id);
+      if (!source) {
+        continue;
+      }
+      const selected = source.id === selectedId;
+      const pin = marker([placement.latitude, placement.longitude], {
+        icon: pinIcon(source.markerUrl, selected),
+        keyboard: true,
+        title: source.name,
+        zIndexOffset: selected ? 1000 : 0,
+      });
+      pin.on('click', () => {
+        onSelectRef.current(source.id);
+      });
+      pin.addTo(markers);
+    }
+  }, [mapReady, pinKind, pins, selectedId, viewRevision]);
+
+  useEffect(() => {
+    const map = mapRef.current;
     if (!map) {
       return;
     }
 
-    for (const asset of MAP_ASSETS) {
-      const pin = markers.get(asset.id);
-      if (!pin) {
-        continue;
-      }
-
-      const selected = asset.id === selectedId;
-      pin.setIcon(markerIcon(asset.alert, selected));
-      pin.setZIndexOffset(selected ? 1000 : 0);
+    if (skipInitialPan.current) {
+      skipInitialPan.current = false;
+      return;
     }
-
     if (!selectedId) {
       return;
     }
 
-    const asset = MAP_ASSETS.find((item) => item.id === selectedId);
-    if (!asset) {
+    const pin = pinsRef.current.find((item) => item.id === selectedId);
+    if (!pin) {
       return;
     }
 
-    map.setView([asset.latitude, asset.longitude], Math.max(map.getZoom(), MAP_ZOOM), {
-      animate: true,
+    map.setView([pin.latitude, pin.longitude], Math.max(map.getZoom(), MAP_ZOOM), {
+      animate: motionOk(),
     });
   }, [selectedId]);
 
@@ -315,7 +430,15 @@ export const MapCanvas = forwardRef<MapCanvasHandle, MapCanvasProps>(function Ma
   useEffect(() => {
     const map = mapRef.current;
     const polygons = polygonsRef.current;
-    if (!map || !selectedGeofenceId) {
+    if (!map) {
+      return;
+    }
+
+    if (skipInitialGeofence.current) {
+      skipInitialGeofence.current = false;
+      return;
+    }
+    if (!selectedGeofenceId) {
       return;
     }
 
@@ -325,11 +448,12 @@ export const MapCanvas = forwardRef<MapCanvasHandle, MapCanvasProps>(function Ma
     }
 
     map.fitBounds(selected.shape.getBounds(), {
-      animate: true,
+      animate: motionOk(),
       maxZoom: Math.max(map.getZoom(), MAP_ZOOM),
       padding: [32, 32],
     });
   }, [selectedGeofenceId]);
 
-  return <div ref={containerRef} aria-label="Device map" className="map-canvas" role="region" />;
+  const regionLabel = pinKind === 'asset' ? 'Asset map' : 'Device map';
+  return <div ref={containerRef} aria-label={regionLabel} className="map-canvas" role="region" />;
 });

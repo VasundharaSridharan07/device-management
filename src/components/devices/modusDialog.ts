@@ -31,3 +31,16 @@ export function showModusDialog(modalId: string) {
 export function closeModusDialog(modalId: string) {
   findModusDialog(modalId)?.close();
 }
+
+/** Escape stays ignored. Save, Close, and X still call close(). */
+export function ignoreDialogCancel(modalId: string): () => void {
+  const blockCancel = (event: Event) => {
+    const dialog = findModusDialog(modalId);
+    if (dialog && event.composedPath().includes(dialog)) {
+      event.preventDefault();
+    }
+  };
+
+  document.addEventListener('cancel', blockCancel, true);
+  return () => document.removeEventListener('cancel', blockCancel, true);
+}

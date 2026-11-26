@@ -162,6 +162,77 @@ export function assignedOutsideRegionCount(
     .length;
 }
 
+export function projectsByIds(projects: Project[], projectIds: readonly string[]): Project[] {
+  const ids = new Set(projectIds);
+  return projects.filter((project) => ids.has(project.id));
+}
+
+export function projectsByIdsInRegion(
+  projects: Project[],
+  projectIds: readonly string[],
+  regionId: string,
+): Project[] {
+  return projectsByIds(projects, projectIds).filter((project) => project.regionId === regionId);
+}
+
+export function projectsAvailableForIdsInRegion(
+  projects: Project[],
+  projectIds: readonly string[],
+  regionId: string,
+): Project[] {
+  const ids = new Set(projectIds);
+  return projects.filter((project) => project.regionId === regionId && !ids.has(project.id));
+}
+
+export function assignedIdsOutsideRegionCount(
+  projects: Project[],
+  projectIds: readonly string[],
+  regionId: string,
+): number {
+  return projectsByIds(projects, projectIds).filter((project) => project.regionId !== regionId)
+    .length;
+}
+
+/** Up to two names, then "N more". Empty membership reads as unavailable. */
+export function projectMembershipLabel(projects: Project[], projectIds: readonly string[]): string {
+  const names = projectsByIds(projects, projectIds).map((project) => project.name);
+  if (names.length === 0) {
+    return 'Unavailable';
+  }
+
+  const preview = names.slice(0, 2);
+  const hidden = names.length - preview.length;
+  return hidden > 0 ? `${preview.join(', ')}, ${hidden} more` : preview.join(', ');
+}
+
+export function isAssetActiveInProject(project: Project, deviceIds: readonly string[]): boolean {
+  return (
+    deviceIds.length > 0 &&
+    deviceIds.every((deviceId) => isDeviceActiveInProject(project, deviceId))
+  );
+}
+
+export function activeAssetProjectCount(
+  projects: Project[],
+  projectIds: readonly string[],
+  deviceIds: readonly string[],
+): number {
+  return projectsByIds(projects, projectIds).filter((project) =>
+    isAssetActiveInProject(project, deviceIds),
+  ).length;
+}
+
+export function addDevicesToProjects(
+  projects: Project[],
+  deviceIds: readonly string[],
+  projectIds: readonly string[],
+): Project[] {
+  return deviceIds.reduce(
+    (current, deviceId) => addDeviceToProjects(current, deviceId, [...projectIds]),
+    projects,
+  );
+}
+
 export function addDeviceToProjects(
   projects: Project[],
   deviceId: string,
@@ -186,6 +257,16 @@ export function removeDeviceFromProject(
   deviceId: string,
   projectId: string,
 ): Project[] {
+  return removeDevicesFromProject(projects, [deviceId], projectId);
+}
+
+/** Drops every listed device from one project. Other memberships stay. */
+export function removeDevicesFromProject(
+  projects: Project[],
+  deviceIds: string[],
+  projectId: string,
+): Project[] {
+  const members = new Set(deviceIds);
   return projects.map((project) => {
     if (project.id !== projectId) {
       return project;
@@ -193,8 +274,9 @@ export function removeDeviceFromProject(
 
     return {
       ...project,
-      deviceIds: project.deviceIds.filter((id) => id !== deviceId),
-      activeDeviceIds: project.activeDeviceIds.filter((id) => id !== deviceId),
+      deviceIds: project.deviceIds.filter((id) => !members.has(id)),
+      activeDeviceIds: project.activeDeviceIds.filter((id) => !members.has(id)),
     };
   });
 }
+

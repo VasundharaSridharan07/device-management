@@ -194,6 +194,10 @@ p {
   padding-inline: 0;
 }
 
+.app-shell modus-wc-side-navigation modus-wc-menu-item:has(> .app-side-nav-item-hidden) {
+  display: none !important;
+}
+
 .app-rail[data-expanded='false']
   modus-wc-side-navigation
   modus-wc-menu-item
@@ -254,6 +258,62 @@ modus-wc-card modus-wc-card article {
   flex-direction: column;
   gap: var(--modus-wc-spacing-md, 0.75rem);
   width: 100%;
+}
+
+.devices-heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--modus-wc-spacing-sm, 0.5rem);
+}
+
+.devices-heading-title {
+  margin: 0;
+}
+
+.devices-asset-view {
+  min-width: 0;
+  border-top: 1px solid var(--modus-wc-color-base-200);
+}
+
+.record-page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--modus-wc-spacing-md, 0.75rem);
+  width: 100%;
+  min-width: 0;
+}
+
+.record-heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--modus-wc-spacing-sm, 0.5rem);
+  min-width: 0;
+}
+
+.record-title {
+  min-width: 0;
+  margin: 0;
+}
+
+.detail-link-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--modus-wc-spacing-sm, 0.5rem);
+  min-width: 0;
+  margin-bottom: var(--modus-wc-spacing-sm, 0.5rem);
+}
+
+.record-help {
+  display: block;
+  margin-bottom: var(--modus-wc-spacing-md, 0.75rem);
+}
+
+.device-projects-embedded {
+  margin-top: 0;
 }
 
 .devices-stage {
@@ -373,6 +433,7 @@ modus-wc-card modus-wc-card article {
 }
 
 .device-info-value {
+  overflow-wrap: anywhere;
   text-align: end;
 }
 
@@ -454,6 +515,11 @@ modus-wc-card modus-wc-card article {
   justify-content: flex-end;
   gap: var(--modus-wc-spacing-sm, 0.5rem);
   width: 100%;
+}
+
+dialog.project-save-confirm .modus-wc-modal-box:not(.modus-wc-modal-fullscreen) {
+  width: min(28rem, calc(100vw - 2rem));
+  max-width: min(28rem, calc(100vw - 2rem));
 }
 
 .device-picker {
@@ -583,6 +649,10 @@ dialog.manage-projects-modal .modus-wc-modal-box:not(.modus-wc-modal-fullscreen)
   .manage-projects-columns {
     grid-template-columns: 1fr 1fr;
   }
+
+  .manage-projects-columns-single {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (min-width: 1024px) {
@@ -654,22 +724,38 @@ modus-wc-side-navigation .nav-custom-icon {
 }
 
 .map-page {
-  position: relative;
+  display: flex;
   flex: 1;
+  flex-direction: column;
   min-width: 0;
   min-height: 0;
 }
 
-.map-page-title {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
+.map-title-row {
+  display: flex;
+  flex: 0 0 auto;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--modus-wc-spacing-sm, 0.5rem);
+  padding: var(--modus-wc-spacing-sm, 0.5rem) var(--modus-wc-spacing-md, 0.75rem);
+  border-bottom: 1px solid var(--modus-wc-color-base-200);
+  background-color: var(--modus-wc-color-base-page);
+}
+
+.map-title {
+  margin: 0;
+}
+
+.map-title-toggle {
+  flex: 0 0 auto;
+}
+
+.map-stage {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
 }
 
 .map-canvas {
@@ -893,18 +979,52 @@ ul.map-geofence-list .modus-wc-menu-item-sublabel {
   background-color: color-mix(in srgb, var(--modus-wc-color-base-100) 88%, transparent);
 }
 
-.leaflet-div-icon.map-marker {
+.map-list-marker {
+  display: block;
+  width: 24px;
+  height: 24px;
+}
+
+.map-selection-footer {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+}
+
+.leaflet-marker-icon.map-pin {
+  background: transparent;
+  border: 0;
+}
+
+.map-pin-image {
+  display: block;
+  width: 40px;
+  height: 40px;
+  filter: drop-shadow(
+    0 1px 2px color-mix(in srgb, var(--modus-wc-color-base-content) 35%, transparent)
+  );
+}
+
+.map-pin-selected .map-pin-image {
+  filter: drop-shadow(0 0 1px var(--modus-wc-color-base-content))
+    drop-shadow(0 0 2px var(--modus-wc-color-base-content));
+}
+
+.leaflet-marker-icon.map-cluster {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background: var(--modus-wc-color-primary);
+  color: var(--modus-wc-color-primary-content);
   border: 2px solid var(--modus-wc-color-base-100);
   border-radius: 999px;
   box-shadow: var(--app-elevation-md);
+  font-family: 'Open Sans', sans-serif;
+  font-size: var(--text-sm);
+  font-weight: 600;
 }
 
-.leaflet-div-icon.map-marker-alert {
-  background: var(--modus-wc-color-warning);
-}
-
-.leaflet-div-icon.map-marker-selected {
+.map-cluster-selected {
   outline: 2px solid var(--modus-wc-color-base-content);
   outline-offset: 2px;
 }

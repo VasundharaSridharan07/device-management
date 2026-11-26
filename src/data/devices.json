@@ -1,6 +1,6 @@
 [
   {
-    "deviceId": "em",
+    "deviceId": "a8K3mN2pQ7x",
     "deviceModel": "EM",
     "category": "Data collectors",
     "serialNumber": "EM185100001",
@@ -16,7 +16,11 @@
     "connectivity": "on",
     "remoteAccessSupported": "no",
     "remoteAccessStatus": "notApplicable",
-    "lastKnownLocation": { "label": "Kettlewell Drive", "latitude": -43.5464, "longitude": 172.5902 },
+    "lastKnownLocation": {
+      "label": "Westmoor Dr west",
+      "latitude": 39.9018,
+      "longitude": -105.1274
+    },
     "serverLocation": "northAmerica",
     "projects": [],
     "battery": "72%",
@@ -24,7 +28,7 @@
     "updateFrequency": "15 min"
   },
   {
-    "deviceId": "mobile",
+    "deviceId": "b4R9tL6wH1c",
     "deviceModel": "Mobile",
     "category": "Data collectors",
     "serialNumber": "MOB185100002",
@@ -40,15 +44,24 @@
     "connectivity": "on",
     "remoteAccessSupported": "yes",
     "remoteAccessStatus": "available",
-    "lastKnownLocation": { "label": "Anita Drive", "latitude": -43.5424, "longitude": 172.6024 },
+    "lastKnownLocation": {
+      "label": "Westmoor Dr",
+      "latitude": 39.902,
+      "longitude": -105.1202
+    },
     "serverLocation": "northAmerica",
-    "projects": [{ "projectId": "g432DvVWd38", "active": true }],
+    "projects": [
+      {
+        "projectId": "g432DvVWd38",
+        "active": true
+      }
+    ],
     "battery": "88%",
     "signal": "Connected",
     "updateFrequency": "5 min"
   },
   {
-    "deviceId": "tsc3",
+    "deviceId": "c7M2vP5nJ8d",
     "deviceModel": "TSC3",
     "category": "Data collectors",
     "serialNumber": "TSC318510003",
@@ -64,15 +77,28 @@
     "connectivity": "on",
     "remoteAccessSupported": "yes",
     "remoteAccessStatus": "needsRegistration",
-    "lastKnownLocation": { "label": "Richmond Ave", "latitude": -43.5412, "longitude": 172.5952 },
+    "lastKnownLocation": {
+      "label": "Westmoor Dr east",
+      "latitude": 39.901,
+      "longitude": -105.1152
+    },
     "serverLocation": "northAmerica",
-    "projects": [{ "projectId": "k7NpQ2mLx9A", "active": true }, { "projectId": "pR8sT1uVw2X", "active": false }],
+    "projects": [
+      {
+        "projectId": "k7NpQ2mLx9A",
+        "active": true
+      },
+      {
+        "projectId": "pR8sT1uVw2X",
+        "active": false
+      }
+    ],
     "battery": "64%",
     "signal": "Connected",
     "updateFrequency": "15 min"
   },
   {
-    "deviceId": "tsc7",
+    "deviceId": "d1Q8sK4yF3e",
     "deviceModel": "TSC7",
     "category": "Data collectors",
     "serialNumber": "TSC718510004",
@@ -88,15 +114,28 @@
     "connectivity": "on",
     "remoteAccessSupported": "yes",
     "remoteAccessStatus": "needsUpgrade",
-    "lastKnownLocation": { "label": "Harbor Blvd", "latitude": -43.5456, "longitude": 172.6034 },
+    "lastKnownLocation": {
+      "label": "Sanders Dam north",
+      "latitude": 39.8994,
+      "longitude": -105.1282
+    },
     "serverLocation": "northAmerica",
-    "projects": [{ "projectId": "yZ6aB7cD8eF", "active": true }, { "projectId": "gH9iJ0kL1mN", "active": true }],
+    "projects": [
+      {
+        "projectId": "yZ6aB7cD8eF",
+        "active": true
+      },
+      {
+        "projectId": "gH9iJ0kL1mN",
+        "active": true
+      }
+    ],
     "battery": "41%",
     "signal": "Connected",
     "updateFrequency": "5 min"
   },
   {
-    "deviceId": "123",
+    "deviceId": "e6W3hB9uG2f",
     "deviceModel": "Tablet",
     "category": "Data collectors",
     "serialNumber": "DAP185100066",
@@ -112,15 +151,32 @@
     "connectivity": "off",
     "remoteAccessSupported": "yes",
     "remoteAccessStatus": "offline",
-    "lastKnownLocation": { "label": "Pine Street", "latitude": -43.5438, "longitude": 172.5994 },
+    "lastKnownLocation": {
+      "label": "Riverway south",
+      "latitude": 39.8964,
+      "longitude": -105.1142
+    },
     "serverLocation": "northAmerica",
-    "projects": [{ "projectId": "wuhrHCBI7X4", "active": true }, { "projectId": "k7NpQ2mLx9A", "active": true }, { "projectId": "g432DvVWd38", "active": false }],
+    "projects": [
+      {
+        "projectId": "wX5yZ6aB7cD",
+        "active": true
+      },
+      {
+        "projectId": "wuhrHCBI7X4",
+        "active": false
+      },
+      {
+        "projectId": "oP2qR3sT4uV",
+        "active": false
+      }
+    ],
     "battery": "12%",
     "signal": "Offline",
     "updateFrequency": "30 min"
   },
   {
-    "deviceId": "verso",
+    "deviceId": "f2N7cD5xR8g",
     "deviceModel": "VERSO",
     "category": "Groundworks",
     "serialNumber": "VER185100006",
@@ -136,15 +192,24 @@
     "connectivity": "on",
     "remoteAccessSupported": "yes",
     "remoteAccessStatus": "available",
-    "lastKnownLocation": { "label": "Denver", "latitude": 39.7392, "longitude": -104.9903 },
+    "lastKnownLocation": {
+      "label": "Sanders Dam yard",
+      "latitude": 39.8976,
+      "longitude": -105.1294
+    },
     "serverLocation": "northAmerica",
-    "projects": [{ "projectId": "oP2qR3sT4uV", "active": true }],
+    "projects": [
+      {
+        "projectId": "oP2qR3sT4uV",
+        "active": true
+      }
+    ],
     "battery": "91%",
     "signal": "Connected",
     "updateFrequency": "15 min"
   },
   {
-    "deviceId": "cb430",
+    "deviceId": "g9P4mT1zL6h",
     "deviceModel": "CB430",
     "category": "Machine control",
     "serialNumber": "CB4301851007",
@@ -160,7 +225,11 @@
     "connectivity": "on",
     "remoteAccessSupported": "no",
     "remoteAccessStatus": "notApplicable",
-    "lastKnownLocation": { "label": "Seattle", "latitude": 47.6062, "longitude": -122.3321 },
+    "lastKnownLocation": {
+      "label": "Sanders Dam south",
+      "latitude": 39.8956,
+      "longitude": -105.128
+    },
     "serverLocation": "northAmerica",
     "projects": [],
     "battery": "55%",
@@ -168,7 +237,7 @@
     "updateFrequency": "60 min"
   },
   {
-    "deviceId": "cb450",
+    "deviceId": "h3S8qV7aK2j",
     "deviceModel": "CB450",
     "category": "Machine control",
     "serialNumber": "CB4501851008",
@@ -184,15 +253,28 @@
     "connectivity": "on",
     "remoteAccessSupported": "yes",
     "remoteAccessStatus": "needsRegistration",
-    "lastKnownLocation": { "label": "Houston", "latitude": 29.7604, "longitude": -95.3698 },
+    "lastKnownLocation": {
+      "label": "Sanders Dam east",
+      "latitude": 39.8984,
+      "longitude": -105.1232
+    },
     "serverLocation": "northAmerica",
-    "projects": [{ "projectId": "gH9iJ0kL1mN", "active": true }, { "projectId": "oP2qR3sT4uV", "active": false }],
+    "projects": [
+      {
+        "projectId": "gH9iJ0kL1mN",
+        "active": true
+      },
+      {
+        "projectId": "oP2qR3sT4uV",
+        "active": false
+      }
+    ],
     "battery": "67%",
     "signal": "Connected",
     "updateFrequency": "15 min"
   },
   {
-    "deviceId": "cb460",
+    "deviceId": "j5L1wC6bN9k",
     "deviceModel": "CB460",
     "category": "Machine control",
     "serialNumber": "CB4601851009",
@@ -208,15 +290,24 @@
     "connectivity": "on",
     "remoteAccessSupported": "yes",
     "remoteAccessStatus": "needsUpgrade",
-    "lastKnownLocation": { "label": "Phoenix", "latitude": 33.4484, "longitude": -112.074 },
+    "lastKnownLocation": {
+      "label": "Riverway north",
+      "latitude": 39.8988,
+      "longitude": -105.1166
+    },
     "serverLocation": "northAmerica",
-    "projects": [{ "projectId": "pR8sT1uVw2X", "active": true }],
+    "projects": [
+      {
+        "projectId": "pR8sT1uVw2X",
+        "active": true
+      }
+    ],
     "battery": "33%",
     "signal": "Connected",
     "updateFrequency": "5 min"
   },
   {
-    "deviceId": "cd700",
+    "deviceId": "k8H4yE2dM3p",
     "deviceModel": "CD700",
     "category": "Machine control",
     "serialNumber": "CD7001851010",
@@ -232,15 +323,24 @@
     "connectivity": "off",
     "remoteAccessSupported": "no",
     "remoteAccessStatus": "notApplicable",
-    "lastKnownLocation": { "label": "Sanders Dam", "latitude": 48.48455, "longitude": -113.13464 },
+    "lastKnownLocation": {
+      "label": "Riverway east",
+      "latitude": 39.898,
+      "longitude": -105.1126
+    },
     "serverLocation": "northAmerica",
-    "projects": [{ "projectId": "g432DvVWd38", "active": false }],
+    "projects": [
+      {
+        "projectId": "g432DvVWd38",
+        "active": false
+      }
+    ],
     "battery": "8%",
     "signal": "Offline",
     "updateFrequency": "60 min"
   },
   {
-    "deviceId": "ec520",
+    "deviceId": "m2J6uF9cQ7r",
     "deviceModel": "EC520",
     "category": "Machine control",
     "serialNumber": "EC5201851011",
@@ -256,15 +356,32 @@
     "connectivity": "off",
     "remoteAccessSupported": "yes",
     "remoteAccessStatus": "offline",
-    "lastKnownLocation": { "label": "Ottawa", "latitude": 45.4215, "longitude": -75.6972 },
+    "lastKnownLocation": {
+      "label": "Sanders Dam west",
+      "latitude": 39.8966,
+      "longitude": -105.1242
+    },
     "serverLocation": "northAmerica",
-    "projects": [],
+    "projects": [
+      {
+        "projectId": "g432DvVWd38",
+        "active": true
+      },
+      {
+        "projectId": "k7NpQ2mLx9A",
+        "active": false
+      },
+      {
+        "projectId": "wuhrHCBI7X4",
+        "active": false
+      }
+    ],
     "battery": "19%",
     "signal": "Offline",
     "updateFrequency": "15 min"
   },
   {
-    "deviceId": "ec520w",
+    "deviceId": "n7K1xG4eR5s",
     "deviceModel": "EC520-W",
     "category": "Machine control",
     "serialNumber": "EC520W1851012",
@@ -280,15 +397,32 @@
     "connectivity": "on",
     "remoteAccessSupported": "yes",
     "remoteAccessStatus": "available",
-    "lastKnownLocation": { "label": "Chicago", "latitude": 41.8781, "longitude": -87.6298 },
+    "lastKnownLocation": {
+      "label": "Sanders Dam pad",
+      "latitude": 39.898,
+      "longitude": -105.1264
+    },
     "serverLocation": "northAmerica",
-    "projects": [{ "projectId": "wuhrHCBI7X4", "active": true }],
+    "projects": [
+      {
+        "projectId": "g432DvVWd38",
+        "active": true
+      },
+      {
+        "projectId": "k7NpQ2mLx9A",
+        "active": false
+      },
+      {
+        "projectId": "pR8sT1uVw2X",
+        "active": false
+      }
+    ],
     "battery": "76%",
     "signal": "Connected",
     "updateFrequency": "5 min"
   },
   {
-    "deviceId": "bx992x",
+    "deviceId": "p4M8zH3fT1t",
     "deviceModel": "BX992-X",
     "category": "Machine control",
     "serialNumber": "BX992X1851013",
@@ -304,7 +438,11 @@
     "connectivity": "on",
     "remoteAccessSupported": "no",
     "remoteAccessStatus": "notApplicable",
-    "lastKnownLocation": { "label": "Los Angeles", "latitude": 34.0522, "longitude": -118.2437 },
+    "lastKnownLocation": {
+      "label": "Riverway south",
+      "latitude": 39.8956,
+      "longitude": -105.1152
+    },
     "serverLocation": "northAmerica",
     "projects": [],
     "battery": "82%",
@@ -312,7 +450,7 @@
     "updateFrequency": "30 min"
   },
   {
-    "deviceId": "mps865",
+    "deviceId": "q9N2aJ6gV8u",
     "deviceModel": "MPS865",
     "category": "Machine control",
     "serialNumber": "MPS8651851014",
@@ -328,15 +466,24 @@
     "connectivity": "on",
     "remoteAccessSupported": "no",
     "remoteAccessStatus": "notApplicable",
-    "lastKnownLocation": { "label": "Dallas", "latitude": 32.7767, "longitude": -96.797 },
+    "lastKnownLocation": {
+      "label": "Riverway west",
+      "latitude": 39.8972,
+      "longitude": -105.1178
+    },
     "serverLocation": "northAmerica",
-    "projects": [{ "projectId": "yZ6aB7cD8eF", "active": false }],
+    "projects": [
+      {
+        "projectId": "yZ6aB7cD8eF",
+        "active": false
+      }
+    ],
     "battery": "59%",
     "signal": "Connected",
     "updateFrequency": "30 min"
   },
   {
-    "deviceId": "r750",
+    "deviceId": "r3P7bK1hW4v",
     "deviceModel": "R750",
     "category": "Machine control",
     "serialNumber": "R75018510015",
@@ -352,15 +499,32 @@
     "connectivity": "on",
     "remoteAccessSupported": "no",
     "remoteAccessStatus": "notApplicable",
-    "lastKnownLocation": { "label": "London", "latitude": 51.5074, "longitude": -0.1278 },
-    "serverLocation": "europe",
-    "projects": [{ "projectId": "wX5yZ6aB7cD", "active": true }, { "projectId": "eF8gH9iJ0kL", "active": true }],
+    "lastKnownLocation": {
+      "label": "Riverway yard",
+      "latitude": 39.8974,
+      "longitude": -105.1154
+    },
+    "serverLocation": "northAmerica",
+    "projects": [
+      {
+        "projectId": "wX5yZ6aB7cD",
+        "active": true
+      },
+      {
+        "projectId": "eF8gH9iJ0kL",
+        "active": false
+      },
+      {
+        "projectId": "gH9iJ0kL1mN",
+        "active": false
+      }
+    ],
     "battery": "70%",
     "signal": "Connected",
     "updateFrequency": "15 min"
   },
   {
-    "deviceId": "r780",
+    "deviceId": "s6Q1cL5jX9w",
     "deviceModel": "R780",
     "category": "Machine control",
     "serialNumber": "R78018510016",
@@ -376,15 +540,24 @@
     "connectivity": "on",
     "remoteAccessSupported": "no",
     "remoteAccessStatus": "notApplicable",
-    "lastKnownLocation": { "label": "Bern", "latitude": 46.948, "longitude": 7.4474 },
-    "serverLocation": "europe",
-    "projects": [{ "projectId": "eF8gH9iJ0kL", "active": false }],
+    "lastKnownLocation": {
+      "label": "Walnut Creek south",
+      "latitude": 39.8934,
+      "longitude": -105.1272
+    },
+    "serverLocation": "northAmerica",
+    "projects": [
+      {
+        "projectId": "eF8gH9iJ0kL",
+        "active": false
+      }
+    ],
     "battery": "48%",
     "signal": "Connected",
     "updateFrequency": "15 min"
   },
   {
-    "deviceId": "r7502",
+    "deviceId": "t8R4dM2kY3x",
     "deviceModel": "R750-2",
     "category": "Machine control",
     "serialNumber": "R75021851017",
@@ -400,15 +573,24 @@
     "connectivity": "on",
     "remoteAccessSupported": "no",
     "remoteAccessStatus": "notApplicable",
-    "lastKnownLocation": { "label": "Nashville", "latitude": 36.1627, "longitude": -86.7816 },
+    "lastKnownLocation": {
+      "label": "Walnut Creek east",
+      "latitude": 39.8932,
+      "longitude": -105.1184
+    },
     "serverLocation": "northAmerica",
-    "projects": [{ "projectId": "gH9iJ0kL1mN", "active": false }],
+    "projects": [
+      {
+        "projectId": "gH9iJ0kL1mN",
+        "active": false
+      }
+    ],
     "battery": "63%",
     "signal": "Connected",
     "updateFrequency": "30 min"
   },
   {
-    "deviceId": "r7802",
+    "deviceId": "u1S9eN7mZ6y",
     "deviceModel": "R780-2",
     "category": "Machine control",
     "serialNumber": "R78021851018",
@@ -424,7 +606,11 @@
     "connectivity": "on",
     "remoteAccessSupported": "no",
     "remoteAccessStatus": "notApplicable",
-    "lastKnownLocation": { "label": "Minneapolis", "latitude": 44.9778, "longitude": -93.265 },
+    "lastKnownLocation": {
+      "label": "Golf preserve",
+      "latitude": 39.9024,
+      "longitude": -105.1128
+    },
     "serverLocation": "northAmerica",
     "projects": [],
     "battery": "57%",
@@ -432,7 +618,7 @@
     "updateFrequency": "30 min"
   },
   {
-    "deviceId": "snm941",
+    "deviceId": "v5T2fP4nA8z",
     "deviceModel": "SNM941",
     "category": "Machine control",
     "serialNumber": "SNM9411851019",
@@ -448,15 +634,32 @@
     "connectivity": "on",
     "remoteAccessSupported": "no",
     "remoteAccessStatus": "notApplicable",
-    "lastKnownLocation": { "label": "Singapore", "latitude": 1.3521, "longitude": 103.8198 },
-    "serverLocation": "asia",
-    "projects": [{ "projectId": "mN1oP2qR3sT", "active": true }],
+    "lastKnownLocation": {
+      "label": "Sanders Dam pad",
+      "latitude": 39.898,
+      "longitude": -105.1264
+    },
+    "serverLocation": "northAmerica",
+    "projects": [
+      {
+        "projectId": "g432DvVWd38",
+        "active": true
+      },
+      {
+        "projectId": "k7NpQ2mLx9A",
+        "active": false
+      },
+      {
+        "projectId": "pR8sT1uVw2X",
+        "active": false
+      }
+    ],
     "battery": "84%",
     "signal": "Connected",
     "updateFrequency": "5 min"
   },
   {
-    "deviceId": "sps",
+    "deviceId": "w7U6gQ8pB1a",
     "deviceModel": "SPS-Series",
     "category": "Machine control",
     "serialNumber": "SPS185100020",
@@ -472,15 +675,19 @@
     "connectivity": "off",
     "remoteAccessSupported": "no",
     "remoteAccessStatus": "notApplicable",
-    "lastKnownLocation": { "label": "Paris", "latitude": 48.8566, "longitude": 2.3522 },
-    "serverLocation": "europe",
+    "lastKnownLocation": {
+      "label": "Westmoor crossing",
+      "latitude": 39.8954,
+      "longitude": -105.1204
+    },
+    "serverLocation": "northAmerica",
     "projects": [],
     "battery": "4%",
     "signal": "Offline",
     "updateFrequency": "60 min"
   },
   {
-    "deviceId": "s-series",
+    "deviceId": "x2V3hR1qC5b",
     "deviceModel": "S-Series",
     "category": "GNSS receivers and smart antennas",
     "serialNumber": "SSER18510021",
@@ -496,15 +703,28 @@
     "connectivity": "on",
     "remoteAccessSupported": "no",
     "remoteAccessStatus": "notApplicable",
-    "lastKnownLocation": { "label": "New York", "latitude": 40.7128, "longitude": -74.006 },
+    "lastKnownLocation": {
+      "label": "Pad connector",
+      "latitude": 39.8986,
+      "longitude": -105.1202
+    },
     "serverLocation": "northAmerica",
-    "projects": [{ "projectId": "k7NpQ2mLx9A", "active": false }, { "projectId": "oP2qR3sT4uV", "active": true }],
+    "projects": [
+      {
+        "projectId": "k7NpQ2mLx9A",
+        "active": false
+      },
+      {
+        "projectId": "oP2qR3sT4uV",
+        "active": true
+      }
+    ],
     "battery": "77%",
     "signal": "Connected",
     "updateFrequency": "15 min"
   },
   {
-    "deviceId": "rts",
+    "deviceId": "y9W8jS4rD7c",
     "deviceModel": "RTS-Series",
     "category": "GNSS receivers and smart antennas",
     "serialNumber": "RTS185100022",
@@ -520,7 +740,11 @@
     "connectivity": "on",
     "remoteAccessSupported": "no",
     "remoteAccessStatus": "notApplicable",
-    "lastKnownLocation": { "label": "Boston", "latitude": 42.3601, "longitude": -71.0589 },
+    "lastKnownLocation": {
+      "label": "Haul road",
+      "latitude": 39.8966,
+      "longitude": -105.1202
+    },
     "serverLocation": "northAmerica",
     "projects": [],
     "battery": "69%",
@@ -528,7 +752,7 @@
     "updateFrequency": "30 min"
   },
   {
-    "deviceId": "cr30",
+    "deviceId": "z4X1kT9sE2d",
     "deviceModel": "CR30",
     "category": "GNSS receivers and smart antennas",
     "serialNumber": "CR3018510023",
@@ -544,15 +768,24 @@
     "connectivity": "off",
     "remoteAccessSupported": "no",
     "remoteAccessStatus": "notApplicable",
-    "lastKnownLocation": { "label": "Kansas City", "latitude": 39.0997, "longitude": -94.5786 },
+    "lastKnownLocation": {
+      "label": "Campus south",
+      "latitude": 39.8942,
+      "longitude": -105.1146
+    },
     "serverLocation": "northAmerica",
-    "projects": [{ "projectId": "pR8sT1uVw2X", "active": false }],
+    "projects": [
+      {
+        "projectId": "pR8sT1uVw2X",
+        "active": false
+      }
+    ],
     "battery": "0%",
     "signal": "Offline",
     "updateFrequency": "60 min"
   },
   {
-    "deviceId": "r58",
+    "deviceId": "a6Y5mU3tF8e",
     "deviceModel": "R58",
     "category": "GNSS receivers and smart antennas",
     "serialNumber": "R58185100024",
@@ -568,7 +801,11 @@
     "connectivity": "on",
     "remoteAccessSupported": "no",
     "remoteAccessStatus": "notApplicable",
-    "lastKnownLocation": { "label": "Austin", "latitude": 30.2672, "longitude": -97.7431 },
+    "lastKnownLocation": {
+      "label": "Campus north",
+      "latitude": 39.9002,
+      "longitude": -105.1124
+    },
     "serverLocation": "northAmerica",
     "projects": [],
     "battery": "52%",
@@ -576,7 +813,7 @@
     "updateFrequency": "15 min"
   },
   {
-    "deviceId": "alloy",
+    "deviceId": "b1Z7nV6uG4f",
     "deviceModel": "Alloy",
     "category": "GNSS receivers and smart antennas",
     "serialNumber": "ALY185100025",
@@ -592,15 +829,24 @@
     "connectivity": "on",
     "remoteAccessSupported": "no",
     "remoteAccessStatus": "notApplicable",
-    "lastKnownLocation": { "label": "Berlin", "latitude": 52.52, "longitude": 13.405 },
-    "serverLocation": "europe",
-    "projects": [{ "projectId": "wX5yZ6aB7cD", "active": true }],
+    "lastKnownLocation": {
+      "label": "West pad edge",
+      "latitude": 39.8972,
+      "longitude": -105.1226
+    },
+    "serverLocation": "northAmerica",
+    "projects": [
+      {
+        "projectId": "wX5yZ6aB7cD",
+        "active": true
+      }
+    ],
     "battery": "100%",
     "signal": "Connected",
     "updateFrequency": "5 min"
   },
   {
-    "deviceId": "r12i",
+    "deviceId": "c8A2pW9vH7g",
     "deviceModel": "R12i",
     "category": "GNSS receivers and smart antennas",
     "serialNumber": "R12I18510026",
@@ -616,15 +862,28 @@
     "connectivity": "on",
     "remoteAccessSupported": "no",
     "remoteAccessStatus": "notApplicable",
-    "lastKnownLocation": { "label": "Stockholm", "latitude": 59.3293, "longitude": 18.0686 },
-    "serverLocation": "europe",
-    "projects": [{ "projectId": "eF8gH9iJ0kL", "active": true }, { "projectId": "wX5yZ6aB7cD", "active": false }],
+    "lastKnownLocation": {
+      "label": "South connector",
+      "latitude": 39.8948,
+      "longitude": -105.1224
+    },
+    "serverLocation": "northAmerica",
+    "projects": [
+      {
+        "projectId": "eF8gH9iJ0kL",
+        "active": true
+      },
+      {
+        "projectId": "wX5yZ6aB7cD",
+        "active": false
+      }
+    ],
     "battery": "61%",
     "signal": "Connected",
     "updateFrequency": "5 min"
   },
   {
-    "deviceId": "r980",
+    "deviceId": "d3B6qX1wJ5h",
     "deviceModel": "R980",
     "category": "GNSS receivers and smart antennas",
     "serialNumber": "R98018510027",
@@ -640,15 +899,19 @@
     "connectivity": "on",
     "remoteAccessSupported": "no",
     "remoteAccessStatus": "notApplicable",
-    "lastKnownLocation": { "label": "Sydney", "latitude": -33.8688, "longitude": 151.2093 },
-    "serverLocation": "asia",
+    "lastKnownLocation": {
+      "label": "North connector",
+      "latitude": 39.8998,
+      "longitude": -105.1188
+    },
+    "serverLocation": "northAmerica",
     "projects": [],
     "battery": "73%",
     "signal": "Connected",
     "updateFrequency": "15 min"
   },
   {
-    "deviceId": "mc10",
+    "deviceId": "e7C4rY8xK2j",
     "deviceModel": "MC10",
     "category": "Additional GNSS and surveying equipment",
     "serialNumber": "MC1018510028",
@@ -664,7 +927,11 @@
     "connectivity": "off",
     "remoteAccessSupported": "no",
     "remoteAccessStatus": "notApplicable",
-    "lastKnownLocation": { "label": "Charlotte", "latitude": 35.2271, "longitude": -80.8431 },
+    "lastKnownLocation": {
+      "label": "Recreation south",
+      "latitude": 39.8928,
+      "longitude": -105.1232
+    },
     "serverLocation": "northAmerica",
     "projects": [],
     "battery": "0%",
@@ -672,7 +939,7 @@
     "updateFrequency": "60 min"
   },
   {
-    "deviceId": "st30",
+    "deviceId": "f9D1sZ3yL6k",
     "deviceModel": "ST30",
     "category": "Additional GNSS and surveying equipment",
     "serialNumber": "ST3018510029",
@@ -688,9 +955,22 @@
     "connectivity": "on",
     "remoteAccessSupported": "no",
     "remoteAccessStatus": "notApplicable",
-    "lastKnownLocation": { "label": "Toronto", "latitude": 43.6532, "longitude": -79.3832 },
+    "lastKnownLocation": {
+      "label": "Golf north",
+      "latitude": 39.9026,
+      "longitude": -105.122
+    },
     "serverLocation": "northAmerica",
-    "projects": [{ "projectId": "wuhrHCBI7X4", "active": false }, { "projectId": "yZ6aB7cD8eF", "active": true }],
+    "projects": [
+      {
+        "projectId": "wuhrHCBI7X4",
+        "active": false
+      },
+      {
+        "projectId": "yZ6aB7cD8eF",
+        "active": true
+      }
+    ],
     "battery": "46%",
     "signal": "Connected",
     "updateFrequency": "15 min"

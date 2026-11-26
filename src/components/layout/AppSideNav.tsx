@@ -6,6 +6,7 @@ import {
 import { useLayoutEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import { useExperiment } from '../../experiments/ExperimentContext';
 import { PRIMARY_NAV, type NavItem } from '../../nav';
 import { SIDE_NAV_MAX_WIDTH, SIDE_NAV_MIN_WIDTH } from '../../theme/shell';
 import { NavIcon } from '../NavIcon';
@@ -24,6 +25,8 @@ export function AppSideNav({
   onExpandedChange,
 }: AppSideNavProps) {
   const navigate = useNavigate();
+  const { config } = useExperiment();
+  const visible = new Set(config.sideNav);
 
   useLayoutEffect(() => {
     const main = document.getElementById('main-content');
@@ -72,23 +75,31 @@ export function AppSideNav({
       >
         <div className="app-side-nav-inner">
           <ModusWcMenu aria-label="Device Management" size="md">
-            {PRIMARY_NAV.map((item) => (
-              <ModusWcMenuItem
-                key={item.value}
-                label={item.label}
-                selected={selected === item.value}
-                size="md"
-                value={item.value}
-                onItemSelect={(event) => {
-                  const value = event.detail?.value;
-                  if (value === item.value) {
-                    handleSelect(item);
-                  }
-                }}
-              >
-                <NavIcon icon={item.icon} />
-              </ModusWcMenuItem>
-            ))}
+            {PRIMARY_NAV.map((item) => {
+              const shown = visible.has(item.value);
+              return (
+                <ModusWcMenuItem
+                  key={item.value}
+                  aria-hidden={shown ? undefined : true}
+                  customClass={shown ? undefined : 'app-side-nav-item-hidden'}
+                  label={item.label}
+                  selected={shown && selected === item.value}
+                  size="md"
+                  value={item.value}
+                  onItemSelect={(event) => {
+                    if (!shown) {
+                      return;
+                    }
+                    const value = event.detail?.value;
+                    if (value === item.value) {
+                      handleSelect(item);
+                    }
+                  }}
+                >
+                  <NavIcon icon={item.icon} />
+                </ModusWcMenuItem>
+              );
+            })}
           </ModusWcMenu>
         </div>
       </ModusWcSideNavigation>

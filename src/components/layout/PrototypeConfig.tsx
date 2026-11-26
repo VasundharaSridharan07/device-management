@@ -1,5 +1,6 @@
 import {
   ModusWcButton,
+  ModusWcCheckbox,
   ModusWcDivider,
   ModusWcIcon,
   ModusWcModal,
@@ -10,12 +11,15 @@ import {
 import { useEffect, useState } from 'react';
 
 import {
+  INVENTORY_VIEWS,
   MANAGE_PROJECTS_VARIANTS,
   PERSONAS,
+  type InventoryViewId,
   type ManageProjectsVariantId,
   type PersonaId,
 } from '../../experiments/config';
 import { useExperiment } from '../../experiments/ExperimentContext';
+import { orderedSideNav, PRIMARY_NAV, type NavItemId } from '../../nav';
 import { closeModusDialog, findModusDialog, showModusDialog } from '../devices/modusDialog';
 
 const PROTOTYPE_CONFIG_MODAL_ID = 'prototype-config-modal';
@@ -27,7 +31,7 @@ function readChecked(event: CustomEvent<InputEvent>): boolean {
 }
 
 export function PrototypeConfig() {
-  const { config, setPersona, setManageProjects } = useExperiment();
+  const { config, setPersona, setManageProjects, setInventoryView, setSideNav } = useExperiment();
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
@@ -76,6 +80,23 @@ export function PrototypeConfig() {
     if (readChecked(event)) {
       setManageProjects(variant);
     }
+  };
+
+  const selectInventoryView =
+    (inventoryView: InventoryViewId) => (event: CustomEvent<InputEvent>) => {
+      if (readChecked(event)) {
+        setInventoryView(inventoryView);
+      }
+    };
+
+  const toggleSideNav = (id: NavItemId) => (event: CustomEvent<InputEvent>) => {
+    const selected = new Set(config.sideNav);
+    if (readChecked(event)) {
+      selected.add(id);
+    } else {
+      selected.delete(id);
+    }
+    setSideNav(orderedSideNav([...selected]));
   };
 
   return (
@@ -131,7 +152,7 @@ export function PrototypeConfig() {
             {PERSONAS.map((persona) => (
               <div key={persona.id} className="prototype-config-choice">
                 <ModusWcRadio
-                  aria-label={persona.label}
+                  aria-label={`${persona.label}, ${persona.role}`}
                   inputId={`prototype-persona-${persona.id}`}
                   label={persona.label}
                   name="prototype-persona"
@@ -142,10 +163,12 @@ export function PrototypeConfig() {
                 <ModusWcTypography
                   customClass="app-muted prototype-config-hint"
                   hierarchy="p"
-                  label={persona.description}
+                  label={`${persona.role}. ${persona.description}`}
                   size="sm"
                 >
-                  <span>{persona.description}</span>
+                  <span>
+                    {persona.role}. {persona.description}
+                  </span>
                 </ModusWcTypography>
               </div>
             ))}
@@ -195,12 +218,75 @@ export function PrototypeConfig() {
             <ModusWcTypography
               customClass="app-muted"
               hierarchy="p"
-              label="Licensed Admin opens the selected variant from a device. Product User reviews membership only."
+              label="Licensed Admin opens the selected variant from a device or an asset. Product User reviews membership only."
               size="sm"
             >
-              Licensed Admin opens the selected variant from a device. Product User reviews
-              membership only.
+              Licensed Admin opens the selected variant from a device or an asset. Product User
+              reviews membership only.
             </ModusWcTypography>
+            <ModusWcTypography
+              customClass="app-muted"
+              hierarchy="p"
+              label="Device and asset views"
+              size="sm"
+              weight="semibold"
+            >
+              Device and asset views
+            </ModusWcTypography>
+            {INVENTORY_VIEWS.map((view) => (
+              <div key={view.id} className="prototype-config-choice">
+                <ModusWcRadio
+                  aria-label={view.label}
+                  inputId={`prototype-inventory-view-${view.id}`}
+                  label={view.label}
+                  name="prototype-inventory-view"
+                  size="sm"
+                  value={config.inventoryView === view.id}
+                  onInputChange={selectInventoryView(view.id)}
+                />
+                <ModusWcTypography
+                  customClass="app-muted prototype-config-hint"
+                  hierarchy="p"
+                  label={view.description}
+                  size="sm"
+                >
+                  <span>{view.description}</span>
+                </ModusWcTypography>
+              </div>
+            ))}
+          </fieldset>
+          <ModusWcDivider />
+          <fieldset className="prototype-config-group">
+            <legend>
+              <ModusWcTypography
+                hierarchy="h3"
+                label="Side navigation"
+                size="sm"
+                weight="semibold"
+              >
+                Side navigation
+              </ModusWcTypography>
+            </legend>
+            <ModusWcTypography
+              customClass="app-muted"
+              hierarchy="p"
+              label="Checked items appear in this order."
+              size="sm"
+            >
+              Checked items appear in this order.
+            </ModusWcTypography>
+            {PRIMARY_NAV.map((item) => (
+              <div key={item.value} className="prototype-config-choice">
+                <ModusWcCheckbox
+                  aria-label={item.label}
+                  inputId={`prototype-side-nav-${item.value}`}
+                  label={item.label}
+                  size="sm"
+                  value={config.sideNav.includes(item.value)}
+                  onInputChange={toggleSideNav(item.value)}
+                />
+              </div>
+            ))}
           </fieldset>
         </div>
         <div slot="footer" className="device-modal-actions">
