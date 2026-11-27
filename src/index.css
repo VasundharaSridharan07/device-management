@@ -73,8 +73,38 @@ p {
 
 .app-shell-navbar {
   --app-navbar-height: 64px;
+  z-index: 900;
   height: var(--app-navbar-height);
   min-height: var(--app-navbar-height);
+}
+
+.app-product-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 8rem);
+  gap: var(--modus-wc-spacing-2xs, 0.25rem);
+  padding: var(--modus-wc-spacing-sm, 0.5rem);
+}
+
+.app-product-grid modus-wc-button {
+  --modus-wc-size-sm: auto;
+}
+
+.app-product-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--modus-wc-spacing-2xs, 0.25rem);
+  width: 100%;
+  min-width: 0;
+  text-align: center;
+  white-space: normal;
+}
+
+.app-product-tile modus-wc-logo {
+  display: block;
+  width: 2rem;
+  height: 2rem;
+  flex: 0 0 auto;
 }
 
 .app-shell-body {
