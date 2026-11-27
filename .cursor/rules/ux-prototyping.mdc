@@ -1,0 +1,27 @@
+---
+description: Architecture and UX rules for this multi-product Trimble prototype
+alwaysApply: true
+---
+
+# UX prototyping
+
+This repository is a frontend-only prototype. WorksManager, Device Management, Trimble Connect, and Admin Portal are modules in one React app.
+
+- Always work within the existing project architecture.
+- Reuse shared components.
+- Keep product modules independent but interoperable.
+- Use centralized mock data in `src/data`. Relate records by id. Do not copy devices, projects, or assets into a product module.
+- Use TypeScript and avoid unnecessary `any` types.
+- Follow existing design tokens and the Modus components already in the app.
+- Keep code modular and maintainable.
+- Prioritize UX fidelity over unnecessary engineering complexity.
+- Do not introduce backend dependencies, fake API clients, or network calls for prototype data.
+- Explain significant architectural decisions.
+- Never overwrite existing work without checking it first.
+
+## Where things live
+
+- Device Management pages and feature components live in `src/modules/device-management`. Other products live in `src/modules/worksmanager`, `src/modules/connect`, and `src/modules/admin-portal`.
+- The shell stays in `src/components/layout`. Experiment settings stay in `src/experiments` and apply across products. The side-nav checklist applies only to Device Management.
+- Custom SVG icons belong in `src/assets/custom-icons`. Images belong in `src/assets/images`. Map markers stay in `src/assets/map-markers`.
+- Side-nav icons go through `NavIcon`: Modus icon, `size="md"`, `customClass="nav-icon"`.

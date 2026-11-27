@@ -1,7 +1,7 @@
 import { ModusWcIcon } from '@trimble-oss/moduswebcomponents-react';
 import type { CSSProperties } from 'react';
 
-import type { NavIconSource } from '../nav';
+import type { NavIconSource } from '../modules/device-management/nav';
 
 type NavIconProps = {
   icon: NavIconSource;

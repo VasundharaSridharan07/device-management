@@ -1,6 +1,6 @@
 import { createContext, useCallback, useContext, useMemo, useState, type ReactNode } from 'react';
 
-import type { NavItemId } from '../nav';
+import type { NavItemId } from '../modules/device-management/nav';
 import {
   loadExperimentConfig,
   saveExperimentConfig,

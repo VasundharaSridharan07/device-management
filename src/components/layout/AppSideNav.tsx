@@ -6,15 +6,27 @@ import {
 import { useLayoutEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { useExperiment } from '../../experiments/ExperimentContext';
-import { PRIMARY_NAV, type NavItem } from '../../nav';
+import type { NavIconSource } from '../../modules/device-management/nav';
 import { SIDE_NAV_MAX_WIDTH, SIDE_NAV_MIN_WIDTH } from '../../theme/shell';
 import { NavIcon } from '../NavIcon';
+
+export type SideNavItem = {
+  path: string;
+  value: string;
+  label: string;
+  icon: NavIconSource;
+  productId: string;
+};
 
 type AppSideNavProps = {
   isPush: boolean;
   expanded: boolean;
   selected: string;
+  activeProductId: string;
+  menuLabel: string;
+  items: readonly SideNavItem[];
+  /** Device Management items outside this set stay mounted and are hidden. */
+  visibleValues?: ReadonlySet<string>;
   onExpandedChange: (expanded: boolean) => void;
 };
 
@@ -22,11 +34,13 @@ export function AppSideNav({
   isPush,
   expanded,
   selected,
+  activeProductId,
+  menuLabel,
+  items,
+  visibleValues,
   onExpandedChange,
 }: AppSideNavProps) {
   const navigate = useNavigate();
-  const { config } = useExperiment();
-  const visible = new Set(config.sideNav);
 
   useLayoutEffect(() => {
     const main = document.getElementById('main-content');
@@ -51,7 +65,7 @@ export function AppSideNav({
     };
   }, [expanded]);
 
-  const handleSelect = (item: NavItem) => {
+  const handleSelect = (item: SideNavItem) => {
     navigate(item.path);
     if (!isPush) {
       onExpandedChange(false);
@@ -74,12 +88,17 @@ export function AppSideNav({
         onExpandedChange={(event) => onExpandedChange(Boolean(event.detail))}
       >
         <div className="app-side-nav-inner">
-          <ModusWcMenu aria-label="Device Management" size="md">
-            {PRIMARY_NAV.map((item) => {
-              const shown = visible.has(item.value);
+          <ModusWcMenu aria-label={menuLabel} size="md">
+            {items.map((item) => {
+              const inProduct = item.productId === activeProductId;
+              const allowed =
+                item.productId !== 'device-management' ||
+                !visibleValues ||
+                visibleValues.has(item.value);
+              const shown = inProduct && allowed;
               return (
                 <ModusWcMenuItem
-                  key={item.value}
+                  key={item.path}
                   aria-hidden={shown ? undefined : true}
                   customClass={shown ? undefined : 'app-side-nav-item-hidden'}
                   label={item.label}
