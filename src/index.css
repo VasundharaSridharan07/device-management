@@ -1042,9 +1042,24 @@ ul.map-geofence-list .modus-wc-menu-item-sublabel {
 }
 
 dialog.prototype-config-modal .modus-wc-modal-box:not(.modus-wc-modal-fullscreen) {
+  display: flex;
+  flex-direction: column;
   width: min(28rem, calc(100vw - 2rem));
   max-width: min(28rem, calc(100vw - 2rem));
   max-height: calc(100dvh - 2rem);
+  overflow: hidden;
+}
+
+dialog.prototype-config-modal .modus-wc-modal-header,
+dialog.prototype-config-modal .modus-wc-modal-action {
+  flex: 0 0 auto;
+}
+
+dialog.prototype-config-modal .modus-wc-modal-content {
+  flex: 1 1 auto;
+  min-height: 0;
+  height: auto;
+  overflow-y: auto;
 }
 
 .prototype-config-header,

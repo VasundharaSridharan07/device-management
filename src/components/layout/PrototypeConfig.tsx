@@ -19,8 +19,12 @@ import {
   type PersonaId,
 } from '../../experiments/config';
 import { useExperiment } from '../../experiments/ExperimentContext';
-import { orderedSideNav, PRIMARY_NAV, type NavItemId } from '../../nav';
-import { closeModusDialog, findModusDialog, showModusDialog } from '../devices/modusDialog';
+import {
+  closeModusDialog,
+  findModusDialog,
+  showModusDialog,
+} from '../../modules/device-management/components/modusDialog';
+import { orderedSideNav, PRIMARY_NAV, type NavItemId } from '../../modules/device-management/nav';
 
 const PROTOTYPE_CONFIG_MODAL_ID = 'prototype-config-modal';
 const SETTINGS_TOOLTIP_ID = 'prototype-settings-tip';
@@ -102,13 +106,13 @@ export function PrototypeConfig() {
   return (
     <>
       <ModusWcTooltip
-        content="Prototype settings"
+        content="UX Prototype Settings"
         position="bottom"
         tooltipId={SETTINGS_TOOLTIP_ID}
       >
         <ModusWcButton
           aria-describedby={SETTINGS_TOOLTIP_ID}
-          aria-label="Prototype settings"
+          aria-label="UX Prototype Settings"
           aria-pressed={open}
           color="tertiary"
           shape="square"
@@ -120,18 +124,18 @@ export function PrototypeConfig() {
         </ModusWcButton>
       </ModusWcTooltip>
       <ModusWcModal
-        aria-label="Prototype settings"
+        aria-label="UX Prototype Settings"
         customClass="prototype-config-modal"
         modalId={PROTOTYPE_CONFIG_MODAL_ID}
       >
         <div slot="header" className="prototype-config-header">
           <ModusWcTypography
             hierarchy="h2"
-            label="Prototype settings"
+            label="UX Prototype Settings"
             size="md"
             weight="semibold"
           >
-            Prototype settings
+            UX Prototype Settings
           </ModusWcTypography>
           <ModusWcTypography
             customClass="app-muted"
@@ -215,15 +219,6 @@ export function PrototypeConfig() {
                 </ModusWcTypography>
               </div>
             ))}
-            <ModusWcTypography
-              customClass="app-muted"
-              hierarchy="p"
-              label="Licensed Admin opens the selected variant from a device or an asset. Product User reviews membership only."
-              size="sm"
-            >
-              Licensed Admin opens the selected variant from a device or an asset. Product User
-              reviews membership only.
-            </ModusWcTypography>
             <ModusWcTypography
               customClass="app-muted"
               hierarchy="p"

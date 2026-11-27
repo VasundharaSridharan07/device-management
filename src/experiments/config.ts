@@ -1,4 +1,4 @@
-import { isNavItemId, orderedSideNav, type NavItemId } from '../nav';
+import { isNavItemId, orderedSideNav, type NavItemId } from '../modules/device-management/nav';
 
 const STORAGE_KEY = 'devicemanagement.prototype';
 
@@ -49,7 +49,7 @@ export const PERSONAS: readonly Persona[] = [
     role: 'Licensed Admin',
     label: 'Fleet / Equipment Manager',
     description:
-      'Administers the account. Can create groups, register devices, and assign devices to projects.',
+      'Administers the account. Can create groups, register devices, update firmware versions, take remote control of devices, remove devices from projects, and clean up data.',
     user: {
       avatarAlt: 'Alex Rivera',
       email: 'alex.rivera@trimble.com',

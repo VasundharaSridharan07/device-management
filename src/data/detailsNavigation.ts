@@ -1,3 +1,9 @@
+import {
+  DM_DEVICES_PATH,
+  DM_MAP_PATH,
+  assetDetailsPath,
+  deviceDetailsPath,
+} from '../modules/device-management/paths';
 import type { MapEntityView } from './mapScene';
 
 export type DetailsLocationState = {
@@ -65,25 +71,25 @@ export function backLocation(state: DetailsLocationState | null): {
   state?: DetailsLocationState;
 } {
   if (state?.returnTo === 'map') {
-    return { pathname: '/' };
+    return { pathname: DM_MAP_PATH };
   }
 
   if (state?.returnTo === 'asset' && state.assetId) {
     return {
-      pathname: `/assets/${state.assetId}`,
+      pathname: assetDetailsPath(state.assetId),
       state: state.parent ?? listAssetState(),
     };
   }
 
   if (state?.returnTo === 'device' && state.deviceId) {
     return {
-      pathname: `/devices/${state.deviceId}`,
+      pathname: deviceDetailsPath(state.deviceId),
       state: state.parent ?? listDeviceState(),
     };
   }
 
   return {
-    pathname: '/devices',
+    pathname: DM_DEVICES_PATH,
     state: {
       returnTo: 'devices',
       entityView: state?.entityView ?? 'devices',

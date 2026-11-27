@@ -1,3 +1,4 @@
+import { assetDetailsPath, deviceDetailsPath } from '../modules/device-management/paths';
 import { NO_ASSOCIATED_ASSET, type Asset } from './assets';
 import { DEVICES } from './devices';
 import {
@@ -152,7 +153,7 @@ export function deviceSelection(device: MapDeviceItem): MapSelection {
   return {
     id: device.id,
     title: device.name,
-    detailsPath: `/devices/${device.id}`,
+    detailsPath: deviceDetailsPath(device.id),
     fields: [
       { label: 'Model', value: device.model },
       { label: 'Reporting', value: device.reportingLabel },
@@ -167,7 +168,7 @@ export function assetSelection(asset: MapAssetItem): MapSelection {
   return {
     id: asset.id,
     title: asset.name,
-    detailsPath: `/assets/${asset.id}`,
+    detailsPath: assetDetailsPath(asset.id),
     fields: [
       { label: 'Type', value: asset.type },
       { label: 'Project', value: asset.projectName },
