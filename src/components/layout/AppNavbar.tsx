@@ -1,7 +1,9 @@
+import type { LogoName } from '@trimble-oss/moduswebcomponents';
 import {
-  ModusWcMenu,
-  ModusWcMenuItem,
+  ModusWcButton,
+  ModusWcLogo,
   ModusWcNavbar,
+  ModusWcPanel,
   ModusWcThemeSwitcher,
   ModusWcTypography,
 } from '@trimble-oss/moduswebcomponents-react';
@@ -10,8 +12,15 @@ import { useNavigate } from 'react-router-dom';
 
 import { personaById } from '../../experiments/config';
 import { useExperiment } from '../../experiments/ExperimentContext';
-import { PRODUCTS } from '../../products';
+import { PRODUCTS, type ProductId } from '../../products';
 import { PrototypeConfig } from './PrototypeConfig';
+
+const PRODUCT_EMBLEM: Record<ProductId, LogoName> = {
+  'admin-portal': 'trimble',
+  connect: 'connect',
+  'device-management': 'trimble',
+  worksmanager: 'worksmanager',
+};
 
 type AppNavbarProps = {
   isWide: boolean;
@@ -28,7 +37,7 @@ export function AppNavbar({ isWide, productLabel, onToggleNav }: AppNavbarProps)
   return (
     <ModusWcNavbar
       appsMenuOpen={appsMenuOpen}
-      customClass="app-shell-navbar sticky top-0 z-[120]"
+      customClass="app-shell-navbar sticky top-0"
       logoName="trimble"
       mainMenuOpen={false}
       userCard={userCard}
@@ -61,24 +70,41 @@ export function AppNavbar({ isWide, productLabel, onToggleNav }: AppNavbarProps)
         />
       </div>
       <div slot="apps">
-        <ModusWcMenu aria-label="Products" size="md">
-          {PRODUCTS.map((product) => (
-            <ModusWcMenuItem
-              key={product.id}
-              label={product.label}
-              selected={product.label === productLabel}
-              size="md"
-              value={product.id}
-              onItemSelect={(event) => {
-                if (event.detail?.value !== product.id) {
-                  return;
-                }
-                navigate(product.homePath);
-                setAppsMenuOpen(false);
-              }}
-            />
-          ))}
-        </ModusWcMenu>
+        <ModusWcPanel
+          aria-label="Products"
+          floating
+          height="auto"
+          width="fit-content"
+        >
+          <div slot="body" className="app-product-grid">
+            {PRODUCTS.map((product) => {
+              const current = product.label === productLabel;
+              return (
+                <ModusWcButton
+                  key={product.id}
+                  aria-current={current ? 'page' : undefined}
+                  aria-label={product.label}
+                  color="tertiary"
+                  size="sm"
+                  variant="borderless"
+                  onButtonClick={() => {
+                    navigate(product.homePath);
+                    setAppsMenuOpen(false);
+                  }}
+                >
+                  <span className="app-product-tile">
+                    <ModusWcLogo
+                      alt=""
+                      emblem
+                      name={PRODUCT_EMBLEM[product.id]}
+                    />
+                    <ModusWcTypography size="sm" label={product.label} />
+                  </span>
+                </ModusWcButton>
+              );
+            })}
+          </div>
+        </ModusWcPanel>
       </div>
       <div slot="end" className="flex items-center gap-1">
         <PrototypeConfig />
